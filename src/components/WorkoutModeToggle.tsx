@@ -93,25 +93,25 @@ const WorkoutModeToggle: React.FC<WorkoutModeToggleProps> = ({
               Enhanced Mode
             </h4>
           </div>
-          <ul className="text-xs space-y-1">
-            <li className="flex items-center gap-1.5">
-              <div className="w-1 h-1 bg-purple-500 rounded-full flex-shrink-0"></div>
+          <ul className="text-sm space-y-1.5">
+            <li className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full flex-shrink-0"></div>
               <span>Set-by-set tracking</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <div className="w-1 h-1 bg-purple-500 rounded-full flex-shrink-0"></div>
+            <li className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full flex-shrink-0"></div>
               <span>RPE and reps logging</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <div className="w-1 h-1 bg-purple-500 rounded-full flex-shrink-0"></div>
-              <span>Advanced timer with context</span>
+            <li className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full flex-shrink-0"></div>
+              <span>Advanced timer</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <div className="w-1 h-1 bg-purple-500 rounded-full flex-shrink-0"></div>
+            <li className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full flex-shrink-0"></div>
               <span>Detailed analytics</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <div className="w-1 h-1 bg-purple-500 rounded-full flex-shrink-0"></div>
+            <li className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full flex-shrink-0"></div>
               <span>Enhanced XP rewards</span>
             </li>
           </ul>

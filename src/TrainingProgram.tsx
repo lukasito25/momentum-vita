@@ -698,60 +698,64 @@ const TrainingProgram = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Modern Enhanced Header */}
       <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 shadow-xl sticky top-0 z-10 border-b border-slate-700/50">
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
+        <div className="p-3 sm:p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={handleBackToProgramSelection}
-                className="p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group mr-1"
+                className="p-1.5 sm:p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group"
                 title="Back to Program Selection"
               >
-                <ArrowLeft className="text-white/80 group-hover:text-white w-5 h-5 transition-colors" />
+                <ArrowLeft className="text-white/80 group-hover:text-white w-4 h-4 sm:w-5 sm:h-5 transition-colors" />
               </button>
-              <div className="p-2 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl shadow-lg">
-                <Trophy className="text-white w-6 h-6" />
+              <div className="p-1.5 sm:p-2 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl shadow-lg">
+                <Trophy className="text-white w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-white">3x/Week Aesthetic</h1>
-                <p className="text-sm text-blue-200/80">Build Your Best Physique</p>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg sm:text-xl font-bold text-white truncate">3x/Week Aesthetic</h1>
+                <p className="text-xs sm:text-sm text-blue-200/80 truncate">Build Your Best Physique</p>
               </div>
-              {timerPopup.isOpen && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm ml-3 shadow-lg">
-                  <Timer className="w-4 h-4 animate-pulse" />
-                  <span className="font-medium">Timer Active</span>
-                </div>
-              )}
             </div>
-            <div className="text-right">
-              <div className="text-sm text-blue-200/70 font-medium">Progress</div>
-              <div className="text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-                {completionPercentage}%
-              </div>
-              {gamification.currentStreak > 0 && (
-                <div className="flex items-center gap-2 text-sm text-orange-300 mt-1 bg-orange-500/20 px-2 py-1 rounded-lg">
-                  <span className="text-base">🔥</span>
-                  <span className="font-semibold">{gamification.currentStreak} day streak</span>
+            <div className="flex items-center justify-between sm:justify-end gap-3">
+              {timerPopup.isOpen && (
+                <div className="flex items-center gap-1.5 px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs font-medium shadow-lg">
+                  <Timer className="w-3 h-3 animate-pulse" />
+                  <span>Timer</span>
                 </div>
               )}
+              <div className="text-right">
+                <div className="text-xs sm:text-sm text-blue-200/70 font-medium">Progress</div>
+                <div className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+                  {completionPercentage}%
+                </div>
+                {gamification.currentStreak > 0 && (
+                  <div className="flex items-center gap-1.5 text-xs text-orange-300 mt-1 bg-orange-500/20 px-1.5 py-0.5 rounded-lg">
+                    <span className="text-sm">🔥</span>
+                    <span className="font-semibold">{gamification.currentStreak} day streak</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Enhanced Phase Info */}
-          <div className={`${phaseInfo.color} text-white p-4 rounded-2xl mb-4 shadow-lg bg-gradient-to-r ${currentPhase === 'foundation' ? 'from-blue-600 to-blue-700' : currentPhase === 'growth' ? 'from-green-600 to-emerald-700' : 'from-red-600 to-rose-700'}`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/20 rounded-xl">
-                  {currentPhase === 'foundation' && <span className="text-2xl">🏗️</span>}
-                  {currentPhase === 'growth' && <span className="text-2xl">📈</span>}
-                  {currentPhase === 'intensity' && <span className="text-2xl">🔥</span>}
+          <div className={`${phaseInfo.color} text-white p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 shadow-lg bg-gradient-to-r ${currentPhase === 'foundation' ? 'from-blue-600 to-blue-700' : currentPhase === 'growth' ? 'from-green-600 to-emerald-700' : 'from-red-600 to-rose-700'}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg sm:rounded-xl">
+                  <span className="text-lg sm:text-2xl">
+                    {currentPhase === 'foundation' && '🏗️'}
+                    {currentPhase === 'growth' && '📈'}
+                    {currentPhase === 'intensity' && '🔥'}
+                  </span>
                 </div>
-                <div>
-                  <h3 className="font-bold text-lg">{phaseInfo.name}</h3>
-                  <p className="text-sm opacity-90 font-medium">{phaseInfo.description}</p>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-bold text-base sm:text-lg truncate">{phaseInfo.name}</h3>
+                  <p className="text-xs sm:text-sm opacity-90 font-medium truncate">{phaseInfo.description}</p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-sm opacity-90 font-semibold bg-white/20 px-3 py-1 rounded-lg">
+              <div className="text-left sm:text-right">
+                <div className="text-xs sm:text-sm opacity-90 font-semibold bg-white/20 px-2 sm:px-3 py-1 rounded-lg">
                   Weeks {currentPhase === 'foundation' ? '1-4' : currentPhase === 'growth' ? '5-8' : '9-12'}
                 </div>
               </div>
@@ -759,16 +763,16 @@ const TrainingProgram = () => {
           </div>
 
           {/* Enhanced Mobile Controls */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-xl">
-                <Calendar className="text-blue-200 w-5 h-5" />
-                <span className="text-sm font-bold text-white">Week {currentWeek}</span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-white/10 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl">
+                <Calendar className="text-blue-200 w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="text-xs sm:text-sm font-bold text-white">Week {currentWeek}</span>
               </div>
               <select
                 value={currentWeek}
                 onChange={(e) => setCurrentWeek(Number(e.target.value))}
-                className="px-3 py-2 bg-white/20 border border-white/30 rounded-xl text-sm font-medium text-white min-w-[90px] focus:bg-white/30 focus:outline-none transition-all backdrop-blur-sm"
+                className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium text-white min-w-[80px] sm:min-w-[90px] focus:bg-white/30 focus:outline-none transition-all backdrop-blur-sm"
               >
                 {[1,2,3,4,5,6,7,8,9,10,11,12].map(week => (
                   <option key={week} value={week} className="bg-slate-800 text-white">Week {week}</option>
@@ -777,8 +781,8 @@ const TrainingProgram = () => {
 
               {/* Enhanced Streak Display */}
               {gamification.currentStreak > 0 && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-orange-500/30 to-red-500/30 text-orange-200 rounded-xl text-sm backdrop-blur-sm border border-orange-400/30">
-                  <span className="text-lg">🔥</span>
+                <div className="flex items-center gap-1.5 px-2 py-1.5 bg-gradient-to-r from-orange-500/30 to-red-500/30 text-orange-200 rounded-lg text-xs backdrop-blur-sm border border-orange-400/30">
+                  <span className="text-base">🔥</span>
                   <span className="font-bold">{gamification.currentStreak}</span>
                 </div>
               )}
@@ -1009,55 +1013,55 @@ const TrainingProgram = () => {
                       </div>
 
                       {/* Enhanced Weight Tracking & Controls */}
-                      <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 space-y-3">
+                      <div className="bg-white p-2.5 rounded-lg shadow-sm border border-gray-200 space-y-2.5">
                         {/* Enhanced Weight Tracking */}
-                        <div className="flex items-center justify-center gap-2">
+                        <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-gray-700">Weight:</span>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => updateWeight(dayName, index, -2.5)}
-                              className="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
+                              className="w-7 h-7 bg-red-500 text-white rounded-md flex items-center justify-center hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             >
-                              <Minus className="w-4 h-4" />
+                              <Minus className="w-3 h-3" />
                             </button>
-                            <span className="w-16 text-center font-mono text-base font-semibold bg-gray-100 py-1.5 px-2 rounded-lg border border-gray-300">
+                            <span className="w-14 text-center font-mono text-sm font-semibold bg-gray-100 py-1 px-1.5 rounded-md border border-gray-300">
                               {currentWeight}kg
                             </span>
                             <button
                               onClick={() => updateWeight(dayName, index, 2.5)}
-                              className="w-8 h-8 bg-green-500 text-white rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors duration-200 touch-manipulation active:scale-95"
+                              className="w-7 h-7 bg-green-500 text-white rounded-md flex items-center justify-center hover:bg-green-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             >
-                              <Plus className="w-4 h-4" />
+                              <Plus className="w-3 h-3" />
                             </button>
                           </div>
                         </div>
 
                         {/* Enhanced Timer and Demo Links */}
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-3 gap-1.5">
                           <button
                             onClick={() => launchTimer(dayName, index, exercise)}
-                            className="flex items-center justify-center gap-1 px-3 py-2 bg-purple-500 text-white text-xs font-medium rounded-lg hover:bg-purple-600 transition-colors duration-200 touch-manipulation active:scale-95"
+                            className="flex items-center justify-center gap-1 px-2 py-1.5 bg-purple-500 text-white text-xs font-medium rounded-md hover:bg-purple-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             title="Open workout timer"
                           >
-                            <Timer className="w-3.5 h-3.5" />
+                            <Timer className="w-3 h-3" />
                             Timer
                           </button>
                           <a
                             href={demos.video + exercise.name.replace(/\s+/g, '+')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-1 px-3 py-2 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
+                            className="flex items-center justify-center gap-1 px-2 py-1.5 bg-red-500 text-white text-xs font-medium rounded-md hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
                           >
-                            <Play className="w-3.5 h-3.5" />
+                            <Play className="w-3 h-3" />
                             Video
                           </a>
                           <a
                             href={demos.guide + exercise.name.replace(/\s+/g, '+')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-1 px-3 py-2 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200 touch-manipulation active:scale-95"
+                            className="flex items-center justify-center gap-1 px-2 py-1.5 bg-blue-500 text-white text-xs font-medium rounded-md hover:bg-blue-600 transition-colors duration-200 touch-manipulation active:scale-95"
                           >
-                            <FileText className="w-3.5 h-3.5" />
+                            <FileText className="w-3 h-3" />
                             Guide
                           </a>
                         </div>
