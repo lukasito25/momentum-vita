@@ -1,6 +1,6 @@
 # 🚀 Momentum Vita - GitHub + Vercel Deployment
 
-Complete guide to deploy **Momentum Vita: Your AI Strength Trainer** from GitHub to Vercel.
+Complete guide to deploy **Momentum Vita: Your AI Strength Trainer** from GitHub to Vercel, including lessons learned from deployment challenges and optimizations.
 
 ## 📋 Prerequisites
 
@@ -49,7 +49,8 @@ Complete guide to deploy **Momentum Vita: Your AI Strength Trainer** from GitHub
    - **Root Directory**: `.` (default)
    - **Build Command**: `npm run build` (auto-detected)
    - **Output Directory**: `dist` (auto-detected)
-   - **Install Command**: `npm ci` (auto-detected)
+   - **Install Command**: `npm install` (**Important**: Use `npm install`, not `npm ci` for Vercel)
+   - **Node.js Version**: `18.x` (specified in vercel.json)
 
 ## 🔐 Step 3: Configure Environment Variables
 
@@ -113,17 +114,66 @@ After deployment completes (usually 1-2 minutes):
    - Click "Push origin"
 3. **Vercel automatically redeploys** with your changes!
 
+## 🔧 Troubleshooting Common Issues
+
+### Build Failures
+
+**Issue**: `Cannot resolve module` or MIME type errors
+- **Solution**: Ensure all build dependencies are in `dependencies`, not `devDependencies`
+- **Fixed in**: Current `package.json` has optimized dependency structure
+
+**Issue**: Build timeout or memory issues
+- **Solution**: Simplified vercel.json configuration:
+```json
+{
+  "version": 2,
+  "name": "momentum-vita",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "NODE_VERSION": "18"
+    }
+  }
+}
+```
+
+### Program Switching Errors
+
+**Issue**: "Failed to switch program" error
+- **Solution**: Enhanced error handling with fallback data implemented
+- **Current Status**: Fixed with proper error boundaries and local storage fallback
+
+### Mobile Layout Issues
+
+**Issue**: Interface not responsive on mobile
+- **Solution**: Complete mobile layout overhaul implemented
+- **Features**: Touch-optimized buttons, responsive grid, improved spacing
+
+### Environment Variable Issues
+
+**Issue**: Database connection fails
+- **Solution**: Verify environment variables are set for all environments (Production, Preview, Development)
+- **Backup**: App works offline with local storage if database unavailable
+
 ## ✅ Verification Checklist
 
 After deployment, verify everything works:
 
 - [ ] **Website loads** at your Vercel URL
-- [ ] **Program selection** works (3 programs display)
-- [ ] **Exercise tracking** saves progress
-- [ ] **Gamification** shows XP and achievements
-- [ ] **Timer popup** works in exercises
-- [ ] **Mobile responsive** on phone/tablet
-- [ ] **Database sync** (if setup) persists data across devices
+- [ ] **Program selection** works (3 programs display) without errors
+- [ ] **Exercise tracking** saves progress and persists
+- [ ] **Gamification** shows XP and achievements correctly
+- [ ] **Timer popup** works properly in exercises
+- [ ] **Mobile responsive** - test on phone/tablet (all screen sizes)
+- [ ] **Program switching** works without "Failed to switch" errors
+- [ ] **Database sync** (if setup) persists data across devices and refreshes
+- [ ] **Error handling** - app works even when offline
 
 ## 🎉 Success!
 

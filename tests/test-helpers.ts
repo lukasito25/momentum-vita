@@ -1,4 +1,5 @@
 import { Page, expect } from '@playwright/test';
+import { AxeBuilder } from '@axe-core/playwright';
 
 export class TestHelpers {
   constructor(private page: Page) {}
