@@ -1009,55 +1009,55 @@ const TrainingProgram = () => {
                       </div>
 
                       {/* Enhanced Weight Tracking & Controls */}
-                      <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-4">
                         {/* Enhanced Weight Tracking */}
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm font-bold text-gray-700">Weight:</span>
-                          <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-center gap-3">
+                          <span className="text-sm font-bold text-gray-700 min-w-0">Weight:</span>
+                          <div className="flex items-center gap-3">
                             <button
                               onClick={() => updateWeight(dayName, index, -2.5)}
-                              className="w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl flex items-center justify-center hover:from-red-600 hover:to-red-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
+                              className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl flex items-center justify-center hover:from-red-600 hover:to-red-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
                             >
-                              <Minus className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                              <Minus className="w-6 h-6 group-hover:scale-110 transition-transform" />
                             </button>
-                            <span className="w-20 text-center font-mono text-lg font-bold bg-gradient-to-r from-slate-100 to-gray-100 py-3 px-2 rounded-xl border border-gray-300 shadow-inner">
+                            <span className="w-24 text-center font-mono text-xl font-bold bg-gradient-to-r from-slate-100 to-gray-100 py-3 px-3 rounded-xl border border-gray-300 shadow-inner">
                               {currentWeight}kg
                             </span>
                             <button
                               onClick={() => updateWeight(dayName, index, 2.5)}
-                              className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl flex items-center justify-center hover:from-green-600 hover:to-green-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
+                              className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl flex items-center justify-center hover:from-green-600 hover:to-green-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
                             >
-                              <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                              <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
                             </button>
                           </div>
                         </div>
 
                         {/* Enhanced Timer and Demo Links */}
-                        <div className="flex gap-2">
+                        <div className="flex flex-col sm:flex-row gap-3">
                           <button
                             onClick={() => launchTimer(dayName, index, exercise)}
-                            className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group font-medium"
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
                             title="Open workout timer"
                           >
-                            <Timer className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                            <Timer className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                             Timer
                           </button>
                           <a
                             href={demos.video + exercise.name.replace(/\s+/g, '+')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group font-medium"
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
                           >
-                            <Play className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            <Play className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             Video
                           </a>
                           <a
                             href={demos.guide + exercise.name.replace(/\s+/g, '+')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group font-medium"
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
                           >
-                            <FileText className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             Guide
                           </a>
                         </div>

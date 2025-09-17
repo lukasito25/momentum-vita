@@ -26,13 +26,13 @@ const WorkoutModeToggle: React.FC<WorkoutModeToggleProps> = ({
   disabled = false
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <h3 className="text-lg font-bold text-gray-800">Workout Mode</h3>
         <button
           onClick={onToggle}
           disabled={disabled}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 ${
+          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all duration-300 touch-manipulation ${
             isEnhancedMode
               ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
               : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
@@ -125,7 +125,7 @@ const WorkoutModeToggle: React.FC<WorkoutModeToggleProps> = ({
             <Zap className="w-4 h-4" />
             Enhanced Features Available
           </h5>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div className="flex items-center gap-2 text-sm text-purple-700">
               <Timer className="w-4 h-4" />
               <span>Set Timers</span>
