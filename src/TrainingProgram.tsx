@@ -1009,55 +1009,55 @@ const TrainingProgram = () => {
                       </div>
 
                       {/* Enhanced Weight Tracking & Controls */}
-                      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-4">
+                      <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 space-y-3">
                         {/* Enhanced Weight Tracking */}
-                        <div className="flex items-center justify-center gap-3">
-                          <span className="text-sm font-bold text-gray-700 min-w-0">Weight:</span>
-                          <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center gap-2">
+                          <span className="text-sm font-medium text-gray-700">Weight:</span>
+                          <div className="flex items-center gap-2">
                             <button
                               onClick={() => updateWeight(dayName, index, -2.5)}
-                              className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl flex items-center justify-center hover:from-red-600 hover:to-red-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
+                              className="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             >
-                              <Minus className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                              <Minus className="w-4 h-4" />
                             </button>
-                            <span className="w-24 text-center font-mono text-xl font-bold bg-gradient-to-r from-slate-100 to-gray-100 py-3 px-3 rounded-xl border border-gray-300 shadow-inner">
+                            <span className="w-16 text-center font-mono text-base font-semibold bg-gray-100 py-1.5 px-2 rounded-lg border border-gray-300">
                               {currentWeight}kg
                             </span>
                             <button
                               onClick={() => updateWeight(dayName, index, 2.5)}
-                              className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl flex items-center justify-center hover:from-green-600 hover:to-green-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
+                              className="w-8 h-8 bg-green-500 text-white rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             >
-                              <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                              <Plus className="w-4 h-4" />
                             </button>
                           </div>
                         </div>
 
                         {/* Enhanced Timer and Demo Links */}
-                        <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="grid grid-cols-3 gap-2">
                           <button
                             onClick={() => launchTimer(dayName, index, exercise)}
-                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-purple-500 text-white text-xs font-medium rounded-lg hover:bg-purple-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             title="Open workout timer"
                           >
-                            <Timer className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                            <Timer className="w-3.5 h-3.5" />
                             Timer
                           </button>
                           <a
                             href={demos.video + exercise.name.replace(/\s+/g, '+')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
                           >
-                            <Play className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                            <Play className="w-3.5 h-3.5" />
                             Video
                           </a>
                           <a
                             href={demos.guide + exercise.name.replace(/\s+/g, '+')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 touch-manipulation active:scale-95 shadow-lg hover:shadow-xl group"
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200 touch-manipulation active:scale-95"
                           >
-                            <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                            <FileText className="w-3.5 h-3.5" />
                             Guide
                           </a>
                         </div>

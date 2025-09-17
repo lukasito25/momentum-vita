@@ -188,7 +188,7 @@ const WorkoutAnalytics: React.FC<WorkoutAnalyticsProps> = ({
   const insights = getInsights();
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
+    <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">

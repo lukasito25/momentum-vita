@@ -113,9 +113,9 @@ const StreakTracker = ({ compact = false, showDetails = true }: StreakTrackerPro
 
   // Full streak tracker
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6">
+    <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
           <Flame className="w-5 h-5 text-orange-500" />
           Workout Streak
