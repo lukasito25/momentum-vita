@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Image fade-in animation for lazy loading */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Progressive image loading styles */
+.progressive-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.progressive-image img {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.progressive-image .blur-placeholder {
+  filter: blur(10px);
+  transform: scale(1.1);
+}
+
+/* Smooth loading states */
+.image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Achievement badge hover effects */
+.achievement-badge {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.achievement-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Workout card image overlay effects */
+.workout-card-overlay {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+  backdrop-filter: blur(1px);
+}
+
+/* Program card image effects */
+.program-card {
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.program-card:hover {
+  transform: translateY(-5px);
+}
+
+.program-card-image {
+  transition: transform 0.3s ease-in-out;
+}
+
+.program-card:hover .program-card-image {
+  transform: scale(1.05);
+}
+
+/* Loading screen animations */
+.loading-screen-bg {
+  background: linear-gradient(45deg, #1e40af, #7c3aed, #dc2626);
+  background-size: 400% 400%;
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Responsive image optimizations */
+@media (max-width: 768px) {
+  .progressive-image {
+    height: auto;
+    min-height: 200px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .achievement-badge,
+  .program-card,
+  .program-card-image {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .progressive-image img {
+    filter: contrast(1.2);
+  }
+}
+
+/* Dark mode support for images */
+@media (prefers-color-scheme: dark) {
+  .progressive-image img {
+    filter: brightness(0.9);
+  }
+}

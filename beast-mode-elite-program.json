@@ -1,0 +1,248 @@
+{
+  "id": "beast-mode-elite",
+  "name": "Beast Mode Elite",
+  "description": "20-week advanced program for elite athletes seeking maximum strength, power, and physique development. Features specialized phases, competition-prep techniques, and cutting-edge training methodologies.",
+  "duration_weeks": 20,
+  "difficulty_level": "advanced",
+  "tags": ["advanced", "elite", "strength", "competition", "specialization"],
+  "is_premium": true,
+  "phases": {
+    "beast_foundation": {
+      "name": "Beast Foundation Phase",
+      "description": "Advanced movement preparation and strength base building",
+      "color": "#7C2D12",
+      "weeks": [1, 2, 3, 4]
+    },
+    "power_dominance": {
+      "name": "Power Dominance Phase",
+      "description": "Maximum power development with olympic lifts and plyometrics",
+      "color": "#991B1B",
+      "weeks": [5, 6, 7, 8]
+    },
+    "strength_supremacy": {
+      "name": "Strength Supremacy Phase",
+      "description": "Peak strength development with powerlifting methodology",
+      "color": "#1F2937",
+      "weeks": [9, 10, 11, 12]
+    },
+    "hypertrophy_warfare": {
+      "name": "Hypertrophy Warfare Phase",
+      "description": "Advanced muscle building with high-intensity techniques",
+      "color": "#7C3AED",
+      "weeks": [13, 14, 15, 16]
+    },
+    "elite_mastery": {
+      "name": "Elite Mastery Phase",
+      "description": "Peak performance integration and mastery of all qualities",
+      "color": "#000000",
+      "weeks": [17, 18, 19, 20]
+    }
+  },
+  "workouts": {
+    "Monday - Beast Push Domination": {
+      "color": "bg-red-700",
+      "exercises": {
+        "beast_foundation": [
+          { "name": "Pin Bench Press", "sets": "6 x 4", "rest": "4 min", "notes": "Multiple pin heights, eliminate stretch reflex", "demo": "pin-bench-press" },
+          { "name": "Bottoms-Up Kettlebell Press", "sets": "4 x 6 each", "rest": "3 min", "notes": "Stability and strength combined", "demo": "bottoms-up-press" },
+          { "name": "Deficit Push-ups", "sets": "4 x 12", "rest": "2.5 min", "notes": "Increased ROM for strength", "demo": "deficit-pushups" },
+          { "name": "Single-Arm Landmine Press", "sets": "4 x 8 each", "rest": "2.5 min", "notes": "Core stability + pressing power", "demo": "landmine-press" },
+          { "name": "Chaos Push-ups (Bands)", "sets": "3 x 10", "rest": "2 min", "notes": "Unstable resistance training", "demo": "chaos-pushups-bands" },
+          { "name": "Z-Press", "sets": "4 x 8", "rest": "2.5 min", "notes": "Seated floor press, core challenge", "demo": "z-press" },
+          { "name": "Tricep Pressdowns (Chains)", "sets": "4 x 10", "rest": "2 min", "notes": "ARM FOCUS: Variable resistance", "demo": "chain-pressdowns" },
+          { "name": "Ring Tricep Extensions", "sets": "3 x 12", "rest": "90 sec", "notes": "ARM FOCUS: Instability challenge", "demo": "ring-tricep-ext" }
+        ],
+        "power_dominance": [
+          { "name": "Speed Bench (Bands)", "sets": "8 x 3", "rest": "2.5 min", "notes": "40% + bands, maximum bar speed", "demo": "speed-bench-bands" },
+          { "name": "Push Jerk", "sets": "6 x 3", "rest": "3 min", "notes": "Olympic lifting technique", "demo": "push-jerk" },
+          { "name": "Ballistic Push-ups", "sets": "5 x 6", "rest": "2.5 min", "notes": "Leave ground completely", "demo": "ballistic-pushups" },
+          { "name": "Medicine Ball Throws", "sets": "5 x 8", "rest": "2 min", "notes": "Chest pass for distance", "demo": "med-ball-chest-throws" },
+          { "name": "Reactive Strength Push-ups", "sets": "4 x 8", "rest": "2.5 min", "notes": "Drop, absorb, explode immediately", "demo": "reactive-pushups" },
+          { "name": "Power Lateral Raise 21s", "sets": "3 x 21", "rest": "2 min", "notes": "7 bottom + 7 top + 7 full", "demo": "power-lateral-21s" },
+          { "name": "Speed Tricep Extensions", "sets": "4 x 12", "rest": "90 sec", "notes": "ARM FOCUS: Maximum velocity", "demo": "speed-tricep-ext" },
+          { "name": "Clapping Diamond Push-ups", "sets": "3 x 8", "rest": "2 min", "notes": "ARM FOCUS: Elite arm power", "demo": "clapping-diamond-pushups" }
+        ],
+        "strength_supremacy": [
+          { "name": "Competition Bench Press", "sets": "8 x 1-3", "rest": "5 min", "notes": "90-105% 1RM, competition commands", "demo": "comp-bench-press" },
+          { "name": "Floor Press (Chains)", "sets": "5 x 3", "rest": "4 min", "notes": "Accommodating resistance", "demo": "floor-press-chains" },
+          { "name": "Incline Bench (3-Board)", "sets": "4 x 5", "rest": "3.5 min", "notes": "Overload partial range", "demo": "incline-3-board" },
+          { "name": "Weighted Handstand Push-ups", "sets": "4 x 5", "rest": "3 min", "notes": "Weight vest or plate", "demo": "weighted-hspu" },
+          { "name": "Sling Shot Bench", "sets": "3 x 5", "rest": "3 min", "notes": "Overload training tool", "demo": "slingshot-bench" },
+          { "name": "JM Press", "sets": "4 x 6", "rest": "2.5 min", "notes": "Hybrid bench/extension movement", "demo": "jm-press" },
+          { "name": "Board Press Triceps", "sets": "4 x 6", "rest": "2.5 min", "notes": "ARM FOCUS: Maximum overload", "demo": "board-press-triceps" },
+          { "name": "Tricep Lockout Rack Press", "sets": "3 x 8", "rest": "2 min", "notes": "ARM FOCUS: Top 6 inches only", "demo": "tricep-lockout-rack" }
+        ],
+        "hypertrophy_warfare": [
+          { "name": "Pre-Exhaustion Bench", "sets": "4 x 8+12", "rest": "3 min", "notes": "Flyes immediately into bench", "demo": "pre-exhaust-bench" },
+          { "name": "Mechanical Drop Sets", "sets": "3 x 8+8+8", "rest": "3 min", "notes": "Incline → Flat → Decline", "demo": "mechanical-drop-sets" },
+          { "name": "Rest-Pause Dips", "sets": "4 x 8+3+3", "rest": "2.5 min", "notes": "15sec rest between mini-sets", "demo": "rest-pause-dips" },
+          { "name": "Stretch-Loaded Presses", "sets": "4 x 10", "rest": "2.5 min", "notes": "5-second stretch at bottom", "demo": "stretch-loaded-press" },
+          { "name": "Length-Tension Flyes", "sets": "3 x 12", "rest": "2 min", "notes": "Maximize stretch position", "demo": "length-tension-flyes" },
+          { "name": "Shoulders Tri-Set", "sets": "4 rounds", "rest": "2.5 min", "notes": "Press + lateral + rear delt", "demo": "shoulders-tri-set" },
+          { "name": "ARM ANNIHILATION: Tri-Set", "sets": "4 rounds", "rest": "2 min", "notes": "ARM FOCUS: Close-grip + dips + extensions", "demo": "tricep-annihilation" },
+          { "name": "Occlusion Tricep Work", "sets": "3 x 20", "rest": "90 sec", "notes": "ARM FOCUS: Blood flow restriction", "demo": "occlusion-triceps" }
+        ],
+        "elite_mastery": [
+          { "name": "Contrast Training Complex", "sets": "5 rounds", "rest": "4 min", "notes": "Heavy bench + explosive push-ups + throws", "demo": "contrast-complex" },
+          { "name": "Chaos Training Circuit", "sets": "4 x 60sec", "rest": "2 min", "notes": "Unstable surface max effort", "demo": "chaos-circuit" },
+          { "name": "Neural Drive Training", "sets": "6 x 1", "rest": "5 min", "notes": "105-110% 1RM eccentrics", "demo": "neural-drive" },
+          { "name": "Competition Simulation", "sets": "3 attempts", "rest": "5 min", "notes": "Full powerlifting meet protocol", "demo": "comp-simulation" },
+          { "name": "Reactive Method Training", "sets": "4 x 6", "rest": "3 min", "notes": "Drop and explode immediately", "demo": "reactive-method" },
+          { "name": "Variable Resistance Mastery", "sets": "4 x 8", "rest": "2.5 min", "notes": "Bands + chains combination", "demo": "variable-resistance" },
+          { "name": "ARM ELITE: Complex Training", "sets": "4 rounds", "rest": "3 min", "notes": "ARM FOCUS: Heavy + speed + endurance", "demo": "arm-elite-complex" },
+          { "name": "Functional Arm Strength", "sets": "3 x varied", "rest": "2 min", "notes": "ARM FOCUS: Real-world applications", "demo": "functional-arm-strength" }
+        ]
+      }
+    },
+    "Wednesday - Beast Pull + Arms": {
+      "color": "bg-blue-700",
+      "exercises": {
+        "beast_foundation": [
+          { "name": "Deficit Deadlifts", "sets": "6 x 4", "rest": "4 min", "notes": "2-4 inch deficit, increased ROM", "demo": "deficit-deadlifts" },
+          { "name": "Chest-Supported T-Bar", "sets": "4 x 8", "rest": "3 min", "notes": "Eliminate momentum, pure pull", "demo": "chest-supported-tbar" },
+          { "name": "Single-Arm Cable Rows", "sets": "4 x 10 each", "rest": "2.5 min", "notes": "Core anti-rotation challenge", "demo": "single-cable-rows" },
+          { "name": "Inverted Rows (Feet Up)", "sets": "4 x 12", "rest": "2.5 min", "notes": "Increased difficulty angle", "demo": "feet-up-inverted" },
+          { "name": "Face Pulls to External Rotation", "sets": "4 x 15", "rest": "2 min", "notes": "Posterior chain + rotator cuff", "demo": "face-pull-ext-rot" },
+          { "name": "Bottoms-Up KB Rows", "sets": "3 x 8 each", "rest": "2.5 min", "notes": "Grip + stability challenge", "demo": "bottoms-up-rows" },
+          { "name": "Preacher Curl 21s", "sets": "3 x 21", "rest": "2 min", "notes": "ARM FOCUS: Full ROM protocol", "demo": "preacher-21s" },
+          { "name": "Spider Curls", "sets": "3 x 12", "rest": "90 sec", "notes": "ARM FOCUS: Chest against incline", "demo": "spider-curls" }
+        ],
+        "power_dominance": [
+          { "name": "High Pull from Blocks", "sets": "6 x 3", "rest": "3 min", "notes": "Olympic derivative, explosive pull", "demo": "high-pull-blocks" },
+          { "name": "Speed Rows (Bands)", "sets": "6 x 5", "rest": "2.5 min", "notes": "Maximum bar velocity", "demo": "speed-rows-bands" },
+          { "name": "Plyometric Pull-ups", "sets": "5 x 5", "rest": "3 min", "notes": "Release bar, catch on descent", "demo": "plyo-pullups" },
+          { "name": "Medicine Ball Slams (Overhead)", "sets": "5 x 10", "rest": "2 min", "notes": "Full lat engagement", "demo": "overhead-med-slams" },
+          { "name": "Battle Rope Spirals", "sets": "4 x 30sec", "rest": "2 min", "notes": "Spiral motion for back", "demo": "battle-rope-spirals" },
+          { "name": "Explosive Shrugs", "sets": "4 x 8", "rest": "2 min", "notes": "Jump at top of movement", "demo": "explosive-shrugs" },
+          { "name": "Speed Hammer Curls", "sets": "4 x 12", "rest": "90 sec", "notes": "ARM FOCUS: Maximum velocity", "demo": "speed-hammer-curls" },
+          { "name": "Ballistic Bicep Curls", "sets": "3 x 10", "rest": "2 min", "notes": "ARM FOCUS: Release weight at top", "demo": "ballistic-curls" }
+        ],
+        "strength_supremacy": [
+          { "name": "Competition Deadlift", "sets": "8 x 1-3", "rest": "5 min", "notes": "90-105% 1RM, competition setup", "demo": "comp-deadlift" },
+          { "name": "Rack Pulls (Knee Height)", "sets": "5 x 3", "rest": "4 min", "notes": "Partial ROM overload", "demo": "rack-pulls-knee" },
+          { "name": "Weighted Pull-ups (Heavy)", "sets": "5 x 3-5", "rest": "3.5 min", "notes": "Maximum weight possible", "demo": "heavy-weighted-pullups" },
+          { "name": "Bent-Over Rows (Chains)", "sets": "4 x 5", "rest": "3 min", "notes": "Accommodating resistance", "demo": "rows-chains" },
+          { "name": "Pendlay Rows", "sets": "4 x 5", "rest": "3 min", "notes": "Dead stop each rep", "demo": "pendlay-rows" },
+          { "name": "Kroc Rows", "sets": "3 x 15 each", "rest": "2.5 min", "notes": "Heavy single-arm, slight body English", "demo": "kroc-rows" },
+          { "name": "Heavy Barbell Curls", "sets": "5 x 5", "rest": "2.5 min", "notes": "ARM FOCUS: Maximum weight", "demo": "heavy-barbell-curls-max" },
+          { "name": "Weighted Chin-ups", "sets": "4 x 6", "rest": "2.5 min", "notes": "ARM FOCUS: Bicep emphasis heavy", "demo": "weighted-chins-heavy" }
+        ],
+        "hypertrophy_warfare": [
+          { "name": "Pre-Exhaustion Rows", "sets": "4 x 12+8", "rest": "3 min", "notes": "Reverse flyes into rows", "demo": "pre-exhaust-rows" },
+          { "name": "Mechanical Drop Set Pulls", "sets": "3 x 8+8+8", "rest": "3 min", "notes": "Wide → Medium → Narrow grip", "demo": "mechanical-pullups" },
+          { "name": "Rest-Pause Cable Rows", "sets": "4 x 10+3+3", "rest": "2.5 min", "notes": "15sec between mini-sets", "demo": "rest-pause-cable-rows" },
+          { "name": "Length-Tension Lat Work", "sets": "4 x 12", "rest": "2 min", "notes": "5-second stretch at bottom", "demo": "length-tension-lats" },
+          { "name": "Unilateral Row Complex", "sets": "3 x 12 each", "rest": "2.5 min", "notes": "3 angles per arm continuously", "demo": "unilateral-row-complex" },
+          { "name": "Back Tri-Set", "sets": "4 rounds", "rest": "2.5 min", "notes": "Pulldown + row + reverse fly", "demo": "back-tri-set" },
+          { "name": "ARM ANNIHILATION: Bicep", "sets": "4 rounds", "rest": "2 min", "notes": "ARM FOCUS: Barbell + hammer + cable", "demo": "bicep-annihilation" },
+          { "name": "Occlusion Bicep Training", "sets": "3 x 20", "rest": "90 sec", "notes": "ARM FOCUS: Blood flow restriction", "demo": "occlusion-biceps" }
+        ],
+        "elite_mastery": [
+          { "name": "Pulling Complex", "sets": "5 rounds", "rest": "4 min", "notes": "Heavy deadlift + explosive row + throws", "demo": "pulling-complex" },
+          { "name": "Neural Overreach Pulls", "sets": "6 x 1", "rest": "5 min", "notes": "105-110% 1RM eccentrics", "demo": "neural-overreach-pulls" },
+          { "name": "Competition Pull Simulation", "sets": "3 attempts", "rest": "5 min", "notes": "Full meet deadlift protocol", "demo": "comp-pull-simulation" },
+          { "name": "Reactive Pulling Method", "sets": "4 x 5", "rest": "3 min", "notes": "Drop and pull immediately", "demo": "reactive-pulling" },
+          { "name": "Chaos Pulling Circuit", "sets": "4 x 60sec", "rest": "2 min", "notes": "Unstable implements maximum effort", "demo": "chaos-pulling-circuit" },
+          { "name": "Variable Resistance Mastery", "sets": "4 x 6", "rest": "2.5 min", "notes": "Bands + chains pulling", "demo": "variable-pulling" },
+          { "name": "ARM ELITE: Pull Complex", "sets": "4 rounds", "rest": "3 min", "notes": "ARM FOCUS: Heavy + speed + endurance", "demo": "arm-pull-complex" },
+          { "name": "Functional Pull Strength", "sets": "3 x varied", "rest": "2 min", "notes": "ARM FOCUS: Real-world applications", "demo": "functional-pull-strength" }
+        ]
+      }
+    },
+    "Friday - Beast Legs + Conditioning + Arms": {
+      "color": "bg-green-700",
+      "exercises": {
+        "beast_foundation": [
+          { "name": "Pause Squats (5 sec)", "sets": "6 x 5", "rest": "4 min", "notes": "Build strength from dead stop", "demo": "5sec-pause-squats" },
+          { "name": "Deficit Romanian Deadlift", "sets": "4 x 8", "rest": "3 min", "notes": "Increase hamstring stretch", "demo": "deficit-rdl" },
+          { "name": "Unilateral Box Step-ups", "sets": "4 x 10 each", "rest": "2.5 min", "notes": "High box, focus control", "demo": "high-box-stepups" },
+          { "name": "Anderson Squats", "sets": "4 x 6", "rest": "3 min", "notes": "Squats from pins at bottom", "demo": "anderson-squats" },
+          { "name": "Single-Leg RDL (Chaos)", "sets": "3 x 8 each", "rest": "2.5 min", "notes": "Unstable surface challenge", "demo": "chaos-single-rdl" },
+          { "name": "Tempo Calf Raises", "sets": "4 x 12", "rest": "2 min", "notes": "3sec up, 3sec down", "demo": "tempo-calf-raises" },
+          { "name": "Rower Intervals", "sets": "6 x 500m", "rest": "90 sec", "notes": "Sub-2:00 pace target", "demo": "rower-intervals" },
+          { "name": "BONUS: Zottman Curls", "sets": "3 x 12", "rest": "90 sec", "notes": "ARM BONUS: Rotation challenge", "demo": "zottman-curls-bonus" },
+          { "name": "BONUS: Overhead Tricep Walk", "sets": "3 x 40 steps", "rest": "90 sec", "notes": "ARM BONUS: Loaded overhead carry", "demo": "overhead-tricep-walk" }
+        ],
+        "power_dominance": [
+          { "name": "Jump Squats (Weighted)", "sets": "6 x 5", "rest": "3 min", "notes": "Hold dumbbells, maximum height", "demo": "weighted-jump-squats" },
+          { "name": "Power Cleans from Floor", "sets": "6 x 3", "rest": "3 min", "notes": "Full Olympic lift technique", "demo": "power-cleans-floor" },
+          { "name": "Depth Jump to Broad Jump", "sets": "5 x 5", "rest": "3 min", "notes": "Reactive strength combo", "demo": "depth-broad-combo" },
+          { "name": "Single-Leg Bounds", "sets": "4 x 8 each", "rest": "2.5 min", "notes": "Maximum distance per bound", "demo": "single-leg-bounds" },
+          { "name": "Speed Squats (Bands)", "sets": "6 x 3", "rest": "2.5 min", "notes": "Band resistance for acceleration", "demo": "speed-squats-bands" },
+          { "name": "Reactive Calf Jumps", "sets": "4 x 10", "rest": "2 min", "notes": "Minimal ground contact", "demo": "reactive-calf-jumps" },
+          { "name": "Bike Power Intervals", "sets": "8 x 30sec", "rest": "90 sec", "notes": "All-out wattage efforts", "demo": "bike-power-intervals" },
+          { "name": "BONUS: Explosive Curls", "sets": "3 x 10", "rest": "90 sec", "notes": "ARM BONUS: Jump during curl", "demo": "explosive-curls-bonus" },
+          { "name": "BONUS: Power Tricep Dips", "sets": "3 x 8", "rest": "90 sec", "notes": "ARM BONUS: Leave surface", "demo": "power-dips-bonus" }
+        ],
+        "strength_supremacy": [
+          { "name": "Competition Back Squat", "sets": "8 x 1-3", "rest": "5 min", "notes": "90-105% 1RM, competition depth", "demo": "comp-back-squat" },
+          { "name": "Front Squat (Heavy)", "sets": "5 x 3", "rest": "4 min", "notes": "Maximum weight possible", "demo": "heavy-front-squat" },
+          { "name": "Good Mornings (Chains)", "sets": "4 x 6", "rest": "3 min", "notes": "Accommodating resistance", "demo": "good-mornings-chains" },
+          { "name": "Bulgarian Split (Heavy)", "sets": "4 x 6 each", "rest": "3 min", "notes": "Heavy dumbbells or barbell", "demo": "heavy-bulgarian-split" },
+          { "name": "Pin Squats", "sets": "4 x 5", "rest": "3.5 min", "notes": "Multiple pin heights", "demo": "pin-squats" },
+          { "name": "Seated Calf Raise (Heavy)", "sets": "5 x 8", "rest": "2.5 min", "notes": "Maximum weight, full ROM", "demo": "heavy-seated-calves" },
+          { "name": "SkiErg Power Intervals", "sets": "6 x 45sec", "rest": "2 min", "notes": "Upper body power endurance", "demo": "skierg-power" },
+          { "name": "BONUS: Heavy Hammer Curls", "sets": "4 x 6", "rest": "2 min", "notes": "ARM BONUS: Maximum weight", "demo": "heavy-hammers-max" },
+          { "name": "BONUS: Weighted Tricep Dips", "sets": "4 x 8", "rest": "2 min", "notes": "ARM BONUS: Belt + plates", "demo": "weighted-dips-max" }
+        ],
+        "hypertrophy_warfare": [
+          { "name": "Pre-Exhaustion Squats", "sets": "4 x 12+8", "rest": "3 min", "notes": "Leg extensions into squats", "demo": "pre-exhaust-squats" },
+          { "name": "Mechanical Drop Set Legs", "sets": "3 x 8+8+8", "rest": "3 min", "notes": "Back squat → front squat → goblet", "demo": "mechanical-leg-drops" },
+          { "name": "Rest-Pause Leg Press", "sets": "4 x 15+5+5", "rest": "2.5 min", "notes": "15sec between mini-sets", "demo": "rest-pause-leg-press" },
+          { "name": "Length-Tension Lunges", "sets": "4 x 12 each", "rest": "2.5 min", "notes": "Deep stretch position holds", "demo": "length-tension-lunges" },
+          { "name": "Quad/Ham Superset", "sets": "4 rounds", "rest": "2 min", "notes": "Leg extension + leg curl", "demo": "quad-ham-superset" },
+          { "name": "Calf Tri-Set", "sets": "3 rounds", "rest": "2.5 min", "notes": "Standing + seated + donkey", "demo": "calf-tri-set" },
+          { "name": "Cardio Warfare", "sets": "20 min", "rest": "N/A", "notes": "Intervals: 2min hard / 1min easy", "demo": "cardio-warfare" },
+          { "name": "ARM ANNIHILATION: Complex", "sets": "4 rounds", "rest": "2 min", "notes": "ARM BONUS: Curl + extension + carry", "demo": "arm-annihilation-complex" },
+          { "name": "BONUS: Occlusion Arms", "sets": "3 x 15+15", "rest": "90 sec", "notes": "ARM BONUS: BFR curls + extensions", "demo": "occlusion-arms-bonus" }
+        ],
+        "elite_mastery": [
+          { "name": "Squatting Complex", "sets": "5 rounds", "rest": "4 min", "notes": "Heavy squat + jump squat + lunge", "demo": "squatting-complex" },
+          { "name": "Neural Drive Squats", "sets": "6 x 1", "rest": "5 min", "notes": "105-110% 1RM eccentrics", "demo": "neural-drive-squats" },
+          { "name": "Competition Squat Simulation", "sets": "3 attempts", "rest": "5 min", "notes": "Full powerlifting meet protocol", "demo": "comp-squat-simulation" },
+          { "name": "Reactive Method Legs", "sets": "4 x 5", "rest": "3 min", "notes": "Drop and squat immediately", "demo": "reactive-leg-method" },
+          { "name": "Chaos Training Legs", "sets": "4 x 45sec", "rest": "2 min", "notes": "Unstable surface max effort", "demo": "chaos-legs" },
+          { "name": "Variable Resistance Legs", "sets": "4 x 6", "rest": "2.5 min", "notes": "Bands + chains squatting", "demo": "variable-legs" },
+          { "name": "Metabolic Massacre", "sets": "25 min EMOM", "rest": "N/A", "notes": "Every minute: 5 burpees + 10 thrusters", "demo": "metabolic-massacre" },
+          { "name": "ARM ELITE: Final Complex", "sets": "4 rounds", "rest": "3 min", "notes": "ARM BONUS: All training methods", "demo": "arm-elite-final" },
+          { "name": "BONUS: Elite Arm Finisher", "sets": "3 x max effort", "rest": "2 min", "notes": "ARM BONUS: Until complete failure", "demo": "elite-arm-finisher" }
+        ]
+      }
+    }
+  },
+  "nutrition_goals": [
+    { "name": "Meal 1: Protein (45g)", "icon": "🥩", "category": "protein" },
+    { "name": "Meal 2: Protein (45g)", "icon": "🍗", "category": "protein" },
+    { "name": "Meal 3: Protein (45g)", "icon": "🥛", "category": "protein" },
+    { "name": "Meal 4: Protein (45g)", "icon": "🍳", "category": "protein" },
+    { "name": "Meal 5: Protein (30g)", "icon": "🐟", "category": "protein" },
+    { "name": "Pre-workout: Power Blend", "icon": "🔥", "category": "supplements" },
+    { "name": "Post-workout: Recovery Shake", "icon": "🥤", "category": "protein" },
+    { "name": "Water: 4-5 Liters", "icon": "💧", "category": "hydration" },
+    { "name": "Vegetables (6 servings)", "icon": "🥗", "category": "micronutrients" },
+    { "name": "Fruits (3 servings)", "icon": "🍎", "category": "micronutrients" },
+    { "name": "Healthy Fats (Multiple)", "icon": "🥑", "category": "fats" },
+    { "name": "Complex Carbs (Timed)", "icon": "🍠", "category": "carbs" },
+    { "name": "Creatine HCL (5g)", "icon": "💊", "category": "supplements" },
+    { "name": "Beta-Alanine (6g)", "icon": "⚡", "category": "supplements" },
+    { "name": "Citrulline (8g)", "icon": "🔥", "category": "supplements" },
+    { "name": "HMB", "icon": "🛡️", "category": "supplements" },
+    { "name": "Omega-3 EPA/DHA", "icon": "🐟", "category": "supplements" },
+    { "name": "Ashwagandha KSM-66", "icon": "🌿", "category": "supplements" },
+    { "name": "ZMA (Zinc/Magnesium)", "icon": "💤", "category": "supplements" },
+    { "name": "Vitamin D3 + K2", "icon": "☀️", "category": "supplements" }
+  ],
+  "nutrition_guidelines": {
+    "daily_protein": "210g (45g x 4 meals + 30g meal 5)",
+    "meal_frequency": "5 meals every 3 hours",
+    "pre_workout": "Power blend 45min before: 40g carbs + caffeine + nootropics",
+    "post_workout": "Recovery shake within 15min: 30g whey + 50g carbs",
+    "hydration": "4-5L daily + 750ml per hour training + electrolytes",
+    "carb_timing": "Around workouts and breakfast, moderate other times",
+    "fat_sources": "Nuts, oils, avocado, fatty fish - away from workout window",
+    "supplements": "Elite performance stack with clinical dosages",
+    "micronutrients": "9 servings fruits/vegetables daily for recovery",
+    "sleep_nutrition": "ZMA + magnesium 30min before bed",
+    "competition_prep": "Adjust carbs based on body composition goals"
+  }
+}
