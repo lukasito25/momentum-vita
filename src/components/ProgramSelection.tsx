@@ -27,7 +27,19 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
       setUserProgress(progressData);
     } catch (error) {
       console.error('Error loading program data:', error);
-      // If database fails, use fallback programs
+      // If database fails, use fallback programs and create fallback user progress
+      setUserProgress({
+        id: 'fallback-user',
+        user_id: 'fallback-user',
+        current_program_id: 'foundation-builder',
+        current_week: 1,
+        completed_exercises: {},
+        exercise_weights: {},
+        nutrition_goals: {},
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
+
       setPrograms([
         {
           id: 'foundation-builder',
@@ -311,7 +323,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
                 onClick={() => isUnlocked && onProgramSelect(program.id)}
               >
                 {/* Card Header with Background Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-52 overflow-hidden">
                   {/* Gradient Background */}
                   <div className={`absolute inset-0 ${getCardGradient(program)} opacity-90`}></div>
 
@@ -359,8 +371,13 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
                     {/* Bottom Section with Program Info */}
                     <div className="space-y-3">
                       <div className="space-y-2">
-                        <h3 className="text-2xl font-bold drop-shadow-lg">{program.name}</h3>
-                        <p className="text-sm opacity-95 leading-relaxed drop-shadow-md bg-black bg-opacity-20 backdrop-blur-sm rounded-lg p-2">
+                        <h3 className="text-2xl font-bold drop-shadow-lg leading-tight">{program.name}</h3>
+                        <p className="text-sm opacity-95 leading-relaxed drop-shadow-md bg-black bg-opacity-30 backdrop-blur-sm rounded-lg p-3 overflow-hidden" style={{
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: 'vertical',
+                          maxHeight: '4.5rem'
+                        }}>
                           {program.description}
                         </p>
                       </div>

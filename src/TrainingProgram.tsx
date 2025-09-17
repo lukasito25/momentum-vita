@@ -113,17 +113,19 @@ const TrainingProgram = () => {
       setCurrentProgramId(programId);
       setCurrentWeek(1); // Reset to week 1 for new program
 
-      // Update user progress
-      await DatabaseService.switchProgram(programId);
-
-      // Update preferences
-      await DatabaseService.savePreferences({
-        current_week: 1,
-        completed_exercises: {},
-        exercise_weights: {},
-        nutrition_goals: {},
-        current_program_id: programId
-      });
+      // Try to update database, but don't fail if database is unavailable
+      try {
+        await DatabaseService.switchProgram(programId);
+        await DatabaseService.savePreferences({
+          current_week: 1,
+          completed_exercises: {},
+          exercise_weights: {},
+          nutrition_goals: {},
+          current_program_id: programId
+        });
+      } catch (dbError) {
+        console.warn('Database unavailable, using local state only:', dbError);
+      }
 
       setShowProgramSelection(false);
     } catch (error) {
