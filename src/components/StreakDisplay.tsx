@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Flame, Calendar, TrendingUp, Target, Clock } from 'lucide-react';
+import { Flame, Calendar, TrendingUp, Target, Clock, Trophy } from 'lucide-react';
 import { DatabaseService, UserGameification } from '../lib/supabase';
 
 interface StreakDisplayProps {

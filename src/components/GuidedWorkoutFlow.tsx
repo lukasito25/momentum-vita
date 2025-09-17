@@ -16,7 +16,9 @@ import {
   ArrowLeft,
   Award,
   TrendingUp,
-  Save
+  Save,
+  Minus,
+  Plus
 } from 'lucide-react';
 import {
   GuidedWorkoutFlowProps,

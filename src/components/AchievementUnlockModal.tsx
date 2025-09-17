@@ -207,7 +207,7 @@ const AchievementUnlockModal = ({ achievement, show, onClose }: AchievementUnloc
         <div className={`absolute inset-0 rounded-2xl border-4 ${rarityConfig.borderColor} animate-glow-pulse pointer-events-none`}></div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes achievement-enter {
           0% {
             transform: scale(0.3) rotate(-180deg);

@@ -238,7 +238,7 @@ const StreakTracker = ({ compact = false, showDetails = true }: StreakTrackerPro
         </>
       )}
 
-      <style jsx>{`
+      <style>{`
         @keyframes pulse-slow {
           0%, 100% {
             transform: scale(1);

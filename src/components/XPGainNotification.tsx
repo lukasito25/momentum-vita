@@ -108,7 +108,7 @@ const XPGainNotification = ({ xpGained, source, onComplete, show }: XPGainNotifi
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes slide-up {
           from {
             transform: translateY(100px);

@@ -470,6 +470,11 @@ const TrainingProgram = () => {
         total_nutrition: totalNutrition
       };
 
+      // Calculate XP for display and saving
+      const exerciseXP = Math.floor((exercisesCompleted / totalExercises) * 50);
+      const nutritionXP = Math.floor((nutritionCompleted / totalNutrition) * 30);
+      const totalXP = exerciseXP + nutritionXP;
+
       // Save session with XP data
       const sessionDataWithXP = {
         ...sessionData,
@@ -483,11 +488,6 @@ const TrainingProgram = () => {
       // Refresh sessions list
       const sessions = await DatabaseService.getSessions();
       setCompletedSessions(sessions);
-
-      // Calculate XP for display
-      const exerciseXP = Math.floor((exercisesCompleted / totalExercises) * 50);
-      const nutritionXP = Math.floor((nutritionCompleted / totalNutrition) * 30);
-      const totalXP = exerciseXP + nutritionXP;
 
       alert(`✅ Session saved to cloud!\n${dayName}\nExercises: ${exercisesCompleted}/${totalExercises}\nNutrition: ${nutritionCompleted}/${totalNutrition}\n🎯 XP Earned: +${totalXP} XP`);
     } catch (error) {
@@ -587,7 +587,6 @@ const TrainingProgram = () => {
       exercise: timerExercise,
       dayName,
       exerciseIndex,
-      enhancedMode: enhancedTracking.isEnhancedMode,
       onComplete: async (index: number, weight: number) => {
         // Mark exercise as complete and update weight
         toggleExercise(dayName, index);
@@ -602,8 +601,6 @@ const TrainingProgram = () => {
         // Update weight in real-time
         updateWeight(dayName, index, newWeight - currentWeight);
       },
-      onSetComplete: handleSetComplete,
-      onSetUpdate: handleSetUpdate,
       onClose: () => {
         // Timer closed - no additional action needed
       }

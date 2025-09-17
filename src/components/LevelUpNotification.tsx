@@ -192,7 +192,7 @@ const LevelUpNotification = ({ newLevel, oldLevel, show, onComplete }: LevelUpNo
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes level-up-enter {
           0% {
             transform: scale(0.1) rotate(-180deg);
