@@ -21,12 +21,26 @@ import type { TimerExercise } from './components/WorkoutTimer';
 import { ExerciseSetTracking, SetData, WorkoutSessionData } from './types/SetTracking';
 import { beastModeEliteWorkouts } from './data/beast-mode-elite';
 import { powerSurgeProWorkouts } from './data/power-surge-pro';
+import { useAuth, useEnhancedFeatures } from './contexts/AuthContext';
+import AuthModal from './components/AuthModal';
 
 const TrainingProgram = () => {
+  // Authentication hooks
+  const { user, login, isAuthenticated } = useAuth();
+  const { hasEnhancedMode } = useEnhancedFeatures();
+
   const [currentWeek, setCurrentWeek] = useState(1);
   const [completedExercises, setCompletedExercises] = useState<Record<string, boolean>>({});
   const [exerciseWeights, setExerciseWeights] = useState<Record<string, number>>({});
   const [nutritionGoals, setNutritionGoals] = useState<Record<string, boolean>>({});
+
+  // Program-specific progress storage
+  const [programProgress, setProgramProgress] = useState<Record<string, {
+    currentWeek: number;
+    completedExercises: Record<string, boolean>;
+    exerciseWeights: Record<string, number>;
+    nutritionGoals: Record<string, boolean>;
+  }>>({});
   const [completedSessions, setCompletedSessions] = useState<any[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -36,6 +50,10 @@ const TrainingProgram = () => {
   const [showGuidedWorkout, setShowGuidedWorkout] = useState(false);
   const [guidedWorkoutDay, setGuidedWorkoutDay] = useState<string>('');
   const [expandedExercises, setExpandedExercises] = useState<Record<string, boolean>>({});
+
+  // Authentication modal state
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authTrigger, setAuthTrigger] = useState<'enhanced-mode' | 'program-switch' | 'manual'>('manual');
 
   // Timer popup hook
   const timerPopup = useTimerPopup();
@@ -75,6 +93,13 @@ const TrainingProgram = () => {
     }
   }, [loading]);
 
+  // Auto-save progress when it changes
+  useEffect(() => {
+    if (!loading && currentProgramId) {
+      saveCurrentProgramProgress();
+    }
+  }, [currentWeek, completedExercises, exerciseWeights, nutritionGoals, currentProgramId, loading]);
+
   const loadData = async () => {
     try {
       const [preferences, sessions, userProgress] = await Promise.all([
@@ -112,17 +137,22 @@ const TrainingProgram = () => {
   // Program selection handlers
   const handleProgramSelect = async (programId: string) => {
     try {
+      // Save current program progress before switching
+      saveCurrentProgramProgress();
+
+      // Switch to new program and load its progress
       setCurrentProgramId(programId);
-      setCurrentWeek(1); // Reset to week 1 for new program
+      loadProgramProgress(programId);
 
       // Try to update database, but don't fail if database is unavailable
       try {
         await DatabaseService.switchProgram(programId);
+        const newProgress = programProgress[programId];
         await DatabaseService.savePreferences({
-          current_week: 1,
-          completed_exercises: {},
-          exercise_weights: {},
-          nutrition_goals: {},
+          current_week: newProgress?.currentWeek || 1,
+          completed_exercises: newProgress?.completedExercises || {},
+          exercise_weights: newProgress?.exerciseWeights || {},
+          nutrition_goals: newProgress?.nutritionGoals || {},
           current_program_id: programId
         });
       } catch (dbError) {
@@ -138,6 +168,29 @@ const TrainingProgram = () => {
 
   const handleBackToProgramSelection = () => {
     setShowProgramSelection(true);
+  };
+
+  // Authentication handlers
+  const handleAuthRequired = (trigger: 'enhanced-mode' | 'program-switch') => {
+    if (isAuthenticated) return true;
+
+    setAuthTrigger(trigger);
+    setShowAuthModal(true);
+    return false;
+  };
+
+  const handleAuth = async (userData: { email: string; name: string; provider: string }) => {
+    try {
+      await login(userData);
+      setShowAuthModal(false);
+
+      // If they were trying to enable enhanced mode, do it now
+      if (authTrigger === 'enhanced-mode') {
+        enhancedTracking.toggleEnhancedMode();
+      }
+    } catch (error) {
+      console.error('Authentication failed:', error);
+    }
   };
 
   // Progressive program structure - changes every 4 weeks, adapted per program
@@ -166,6 +219,9 @@ const TrainingProgram = () => {
     if (currentProgramId === 'power-surge-pro') {
       // 16-week program with 4 phases (4 weeks each)
       phaseIndex = week <= 4 ? 1 : week <= 8 ? 2 : week <= 12 ? 3 : 4;
+    } else if (currentProgramId === 'beast-mode-elite') {
+      // 20-week program with 3 phases (approximately 6-7 weeks each)
+      phaseIndex = week <= 7 ? 1 : week <= 14 ? 2 : 3;
     } else {
       // 12-week programs with 3 phases (4 weeks each)
       phaseIndex = week <= 4 ? 1 : week <= 8 ? 2 : 3;
@@ -373,6 +429,49 @@ const TrainingProgram = () => {
   };
 
   const workouts = getWorkouts();
+
+  // Get current program duration
+  const getCurrentProgramDuration = () => {
+    switch (currentProgramId) {
+      case 'power-surge-pro':
+        return 16;
+      case 'beast-mode-elite':
+        return 20;
+      case 'foundation-builder':
+      default:
+        return 12;
+    }
+  };
+
+  // Save current program progress
+  const saveCurrentProgramProgress = () => {
+    setProgramProgress(prev => ({
+      ...prev,
+      [currentProgramId]: {
+        currentWeek,
+        completedExercises,
+        exerciseWeights,
+        nutritionGoals
+      }
+    }));
+  };
+
+  // Load program progress when switching
+  const loadProgramProgress = (programId: string) => {
+    const progress = programProgress[programId];
+    if (progress) {
+      setCurrentWeek(progress.currentWeek);
+      setCompletedExercises(progress.completedExercises);
+      setExerciseWeights(progress.exerciseWeights);
+      setNutritionGoals(progress.nutritionGoals);
+    } else {
+      // New program - start fresh
+      setCurrentWeek(1);
+      setCompletedExercises({});
+      setExerciseWeights({});
+      setNutritionGoals({});
+    }
+  };
 
   const updateWeight = async (day: string, exerciseIndex: number, change: number) => {
     const key = `${day}-${exerciseIndex}-week${currentWeek}`;
@@ -863,7 +962,7 @@ const TrainingProgram = () => {
                 onChange={(e) => setCurrentWeek(Number(e.target.value))}
                 className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium text-white min-w-[80px] sm:min-w-[90px] focus:bg-white/30 focus:outline-none transition-all backdrop-blur-sm"
               >
-                {[1,2,3,4,5,6,7,8,9,10,11,12].map(week => (
+                {Array.from({ length: getCurrentProgramDuration() }, (_, i) => i + 1).map(week => (
                   <option key={week} value={week} className="bg-slate-800 text-white">Week {week}</option>
                 ))}
               </select>
@@ -912,7 +1011,13 @@ const TrainingProgram = () => {
       <div className="px-4 pb-6">
         <WorkoutModeToggle
           isEnhancedMode={enhancedTracking.isEnhancedMode}
-          onToggle={enhancedTracking.toggleEnhancedMode}
+          onToggle={() => {
+            if (!enhancedTracking.isEnhancedMode && !hasEnhancedMode) {
+              handleAuthRequired('enhanced-mode');
+            } else {
+              enhancedTracking.toggleEnhancedMode();
+            }
+          }}
           showGuidedOption={true}
           onStartGuided={() => {
             // You could show a day selector here or default to current day
@@ -1618,6 +1723,14 @@ const TrainingProgram = () => {
         oldLevel={gamification.events.levelUp.oldLevel}
         show={gamification.events.levelUp.show}
         onComplete={gamification.closeLevelUpNotification}
+      />
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onAuth={handleAuth}
+        trigger={authTrigger}
       />
     </div>
   );

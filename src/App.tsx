@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import TrainingProgram from './TrainingProgram';
 import { ImageService } from './lib/imageService';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   useEffect(() => {
@@ -8,7 +9,11 @@ function App() {
     ImageService.initializeImageService();
   }, []);
 
-  return <TrainingProgram />
+  return (
+    <AuthProvider>
+      <TrainingProgram />
+    </AuthProvider>
+  )
 }
 
 export default App
