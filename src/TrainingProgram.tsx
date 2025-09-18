@@ -19,6 +19,8 @@ import GuidedWorkoutFlow from './components/GuidedWorkoutFlow';
 import WorkoutModeToggle from './components/WorkoutModeToggle';
 import type { TimerExercise } from './components/WorkoutTimer';
 import { ExerciseSetTracking, SetData, WorkoutSessionData } from './types/SetTracking';
+import { beastModeEliteWorkouts } from './data/beast-mode-elite';
+import { powerSurgeProWorkouts } from './data/power-surge-pro';
 
 const TrainingProgram = () => {
   const [currentWeek, setCurrentWeek] = useState(1);
@@ -138,14 +140,41 @@ const TrainingProgram = () => {
     setShowProgramSelection(true);
   };
 
-  // Progressive program structure - changes every 4 weeks
+  // Progressive program structure - changes every 4 weeks, adapted per program
   const getPhase = (week: number) => {
-    if (week <= 4) return "foundation";
-    if (week <= 8) return "growth";
-    return "intensity";
+    const programPhases = {
+      'foundation-builder': {
+        1: 'foundation',
+        2: 'growth',
+        3: 'intensity'
+      },
+      'beast-mode-elite': {
+        1: 'preparation',
+        2: 'unleashed',
+        3: 'legendary'
+      },
+      'power-surge-pro': {
+        1: 'build',
+        2: 'surge',
+        3: 'peak',
+        4: 'elite'
+      }
+    };
+
+    // Different phase progression for different programs
+    let phaseIndex: number;
+    if (currentProgramId === 'power-surge-pro') {
+      // 16-week program with 4 phases (4 weeks each)
+      phaseIndex = week <= 4 ? 1 : week <= 8 ? 2 : week <= 12 ? 3 : 4;
+    } else {
+      // 12-week programs with 3 phases (4 weeks each)
+      phaseIndex = week <= 4 ? 1 : week <= 8 ? 2 : 3;
+    }
+    return programPhases[currentProgramId as keyof typeof programPhases]?.[phaseIndex] || 'foundation';
   };
 
   const phaseConfig = {
+    // Foundation Builder phases
     foundation: {
       name: "Foundation Phase",
       description: "Building movement patterns and base strength",
@@ -160,6 +189,43 @@ const TrainingProgram = () => {
       name: "Intensity Phase",
       description: "Advanced techniques and peak strength",
       color: "bg-red-600"
+    },
+    // Beast Mode Elite phases
+    preparation: {
+      name: "Beast Preparation Phase",
+      description: "Advanced movement preparation and power building",
+      color: "bg-orange-600"
+    },
+    unleashed: {
+      name: "Power Unleashed Phase",
+      description: "Maximum power development and heavy training",
+      color: "bg-red-700"
+    },
+    legendary: {
+      name: "Legendary Phase",
+      description: "Elite performance and legendary strength",
+      color: "bg-gray-900"
+    },
+    // Power Surge Pro phases
+    build: {
+      name: "Power Build Phase",
+      description: "Building explosive power foundation",
+      color: "bg-purple-600"
+    },
+    surge: {
+      name: "Strength Surge Phase",
+      description: "Increasing load capacity and raw strength",
+      color: "bg-indigo-600"
+    },
+    peak: {
+      name: "Power Peak Phase",
+      description: "Maximum power output with plyometrics",
+      color: "bg-blue-700"
+    },
+    elite: {
+      name: "Elite Conditioning Phase",
+      description: "Peak performance with advanced techniques",
+      color: "bg-slate-800"
     }
   };
 
@@ -180,7 +246,21 @@ const TrainingProgram = () => {
     { name: "B-Complex", icon: "💉", category: "supplements" }
   ];
 
-  const workouts = {
+  // Function to get workouts based on current program
+  const getWorkouts = () => {
+    switch (currentProgramId) {
+      case 'beast-mode-elite':
+        return beastModeEliteWorkouts;
+      case 'power-surge-pro':
+        return powerSurgeProWorkouts;
+      case 'foundation-builder':
+      default:
+        return foundationBuilderWorkouts;
+    }
+  };
+
+  // Foundation Builder workouts (original program)
+  const foundationBuilderWorkouts = {
     "Monday - Push Day": {
       color: "bg-red-600",
       exercises: {
@@ -291,6 +371,8 @@ const TrainingProgram = () => {
       }
     }
   };
+
+  const workouts = getWorkouts();
 
   const updateWeight = async (day: string, exerciseIndex: number, change: number) => {
     const key = `${day}-${exerciseIndex}-week${currentWeek}`;
@@ -873,36 +955,35 @@ const TrainingProgram = () => {
                 {/* Gradient Overlay */}
                 <div className={`absolute inset-0 bg-gradient-to-r ${workout.color === 'bg-red-600' ? 'from-red-600/90 via-red-700/90 to-rose-800/90' : workout.color === 'bg-blue-600' ? 'from-blue-600/90 via-blue-700/90 to-indigo-800/90' : 'from-green-600/90 via-green-700/90 to-emerald-800/90'}`}></div>
 
-                {/* Content Overlay */}
-                <div className="absolute inset-0 p-3 sm:p-5 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                {/* Content Overlay - Single Row Layout */}
+                <div className="absolute inset-0 p-3 sm:p-5 text-white flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                    <div className="p-2 sm:p-3 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm border border-white/30 shadow-lg">
-                      <span className="text-lg sm:text-2xl drop-shadow-md">
+                    <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg backdrop-blur-sm border border-white/30 shadow-lg flex-shrink-0">
+                      <span className="text-sm sm:text-lg drop-shadow-md">
                         {workout.color === 'bg-red-600' && '💪'}
                         {workout.color === 'bg-blue-600' && '🎯'}
                         {workout.color === 'bg-green-600' && '🏃'}
                       </span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h2 className="text-base sm:text-xl font-bold leading-tight drop-shadow-lg truncate">
+                      <h2 className="text-sm sm:text-lg font-bold leading-tight drop-shadow-lg truncate">
                         {dayName.split(' - ')[0]}
                       </h2>
-                      <p className="text-xs sm:text-sm opacity-95 font-medium drop-shadow-md bg-black/20 backdrop-blur-sm px-2 py-1 rounded-lg truncate">
+                      <p className="text-xs opacity-95 font-medium drop-shadow-md truncate">
                         {dayName.split(' - ')[1]}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 sm:gap-4">
-                    <div className="flex flex-col items-center bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-white/30 shadow-lg">
-                      <div className="text-sm sm:text-lg font-bold drop-shadow-md">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                    <div className="flex items-center bg-white/20 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-white/30 shadow-lg">
+                      <div className="text-xs sm:text-sm font-bold drop-shadow-md">
                         {dayProgress}/{exercises.length}
                       </div>
-                      <div className="text-xs opacity-90 font-medium">Exercises</div>
                     </div>
                     {dayCompleted && (
-                      <div className="p-3 bg-green-500/40 backdrop-blur-sm rounded-xl border border-green-300/50 shadow-lg">
-                        <CheckCircle2 className="w-6 h-6 text-green-200 drop-shadow-md" />
+                      <div className="p-1.5 sm:p-2 bg-green-500/40 backdrop-blur-sm rounded-lg border border-green-300/50 shadow-lg">
+                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-200 drop-shadow-md" />
                       </div>
                     )}
                   </div>
