@@ -179,97 +179,154 @@ export class DatabaseService {
 
   // Save completed session
   static async saveSession(sessionData: Omit<CompletedSession, 'id' | 'user_id' | 'created_at' | 'updated_at'>) {
-    const { data, error } = await supabase
-      .from('completed_sessions')
-      .insert({
-        user_id: this.userId,
-        ...sessionData
-      })
-      .select()
-      .single()
-
-    if (error) throw error
-    return data
-  }
-
-  // Get all completed sessions
-  static async getSessions(): Promise<CompletedSession[]> {
-    const { data, error } = await supabase
-      .from('completed_sessions')
-      .select('*')
-      .eq('user_id', this.userId)
-      .order('created_at', { ascending: false })
-
-    if (error) throw error
-    return data || []
-  }
-
-  // Save user preferences (current state)
-  static async savePreferences(preferences: Omit<UserPreferences, 'id' | 'user_id' | 'created_at' | 'updated_at'>) {
-    // First, try to update existing record
-    const { data: updateData, error: updateError } = await supabase
-      .from('user_preferences')
-      .update({
-        ...preferences,
-        updated_at: new Date().toISOString()
-      })
-      .eq('user_id', this.userId)
-      .select()
-      .single()
-
-    // If update succeeded, return the data
-    if (updateData && !updateError) {
-      return updateData;
-    }
-
-    // If no row exists (PGRST116 error), insert new record
-    if (updateError && updateError.code === 'PGRST116') {
-      const { data: insertData, error: insertError } = await supabase
-        .from('user_preferences')
+    try {
+      const { data, error } = await supabase
+        .from('completed_sessions')
         .insert({
           user_id: this.userId,
-          ...preferences
+          ...sessionData
         })
         .select()
         .single()
 
-      if (insertError) {
-        throw insertError;
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.warn('Database save failed, using localStorage fallback:', error)
+      // Fallback to localStorage
+      const sessionWithId = {
+        id: `session_${Date.now()}`,
+        user_id: this.userId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        ...sessionData
       }
 
-      return insertData;
-    }
+      const existingSessions = JSON.parse(localStorage.getItem('completed_sessions') || '[]')
+      existingSessions.unshift(sessionWithId)
+      localStorage.setItem('completed_sessions', JSON.stringify(existingSessions))
 
-    // If there was a different error, throw it
-    if (updateError) {
-      throw updateError;
+      return sessionWithId
     }
+  }
 
-    return updateData;
+  // Get all completed sessions
+  static async getSessions(): Promise<CompletedSession[]> {
+    try {
+      const { data, error } = await supabase
+        .from('completed_sessions')
+        .select('*')
+        .eq('user_id', this.userId)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      console.warn('Database fetch failed, using localStorage fallback:', error)
+      // Fallback to localStorage
+      const sessions = JSON.parse(localStorage.getItem('completed_sessions') || '[]')
+      return sessions.filter((session: CompletedSession) => session.user_id === this.userId)
+    }
+  }
+
+  // Save user preferences (current state)
+  static async savePreferences(preferences: Omit<UserPreferences, 'id' | 'user_id' | 'created_at' | 'updated_at'>) {
+    try {
+      // First, try to update existing record
+      const { data: updateData, error: updateError } = await supabase
+        .from('user_preferences')
+        .update({
+          ...preferences,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', this.userId)
+        .select()
+        .single()
+
+      // If update succeeded, return the data
+      if (updateData && !updateError) {
+        return updateData;
+      }
+
+      // If no row exists (PGRST116 error), insert new record
+      if (updateError && updateError.code === 'PGRST116') {
+        const { data: insertData, error: insertError } = await supabase
+          .from('user_preferences')
+          .insert({
+            user_id: this.userId,
+            ...preferences
+          })
+          .select()
+          .single()
+
+        if (insertError) {
+          throw insertError;
+        }
+
+        return insertData;
+      }
+
+      // If there was a different error, throw it
+      if (updateError) {
+        throw updateError;
+      }
+
+      return updateData;
+    } catch (error) {
+      console.warn('Database preferences save failed, using localStorage fallback:', error)
+      // Fallback to localStorage
+      const preferencesWithId = {
+        id: `prefs_${this.userId}`,
+        user_id: this.userId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        ...preferences
+      }
+
+      localStorage.setItem(`user_preferences_${this.userId}`, JSON.stringify(preferencesWithId))
+      return preferencesWithId
+    }
   }
 
   // Get user preferences
   static async getPreferences(): Promise<UserPreferences | null> {
-    const { data, error } = await supabase
-      .from('user_preferences')
-      .select('*')
-      .eq('user_id', this.userId)
-      .single()
+    try {
+      const { data, error } = await supabase
+        .from('user_preferences')
+        .select('*')
+        .eq('user_id', this.userId)
+        .single()
 
-    if (error) {
-      if (error.code === 'PGRST116') {
-        // No row found, return default
-        return {
-          current_week: 1,
-          completed_exercises: {},
-          exercise_weights: {},
-          nutrition_goals: {}
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No row found, return default
+          return {
+            current_week: 1,
+            completed_exercises: {},
+            exercise_weights: {},
+            nutrition_goals: {}
+          }
         }
+        throw error
       }
-      throw error
-    }
 
-    return data
+      return data
+    } catch (error) {
+      console.warn('Database preferences fetch failed, using localStorage fallback:', error)
+      // Fallback to localStorage
+      const stored = localStorage.getItem(`user_preferences_${this.userId}`)
+      if (stored) {
+        return JSON.parse(stored)
+      }
+
+      // Return default preferences
+      return {
+        current_week: 1,
+        completed_exercises: {},
+        exercise_weights: {},
+        nutrition_goals: {}
+      }
+    }
   }
 
   // Delete a session

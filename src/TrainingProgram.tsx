@@ -484,17 +484,20 @@ const TrainingProgram = () => {
       };
 
       // Save session and trigger gamification updates
-      await DatabaseService.saveSession(sessionDataWithXP);
+      const savedSession = await DatabaseService.saveSession(sessionDataWithXP);
       await gamification.logWorkoutCompletion(exercisesCompleted, totalExercises, nutritionCompleted, totalNutrition);
 
       // Refresh sessions list
       const sessions = await DatabaseService.getSessions();
       setCompletedSessions(sessions);
 
-      alert(`✅ Session saved to cloud!\n${dayName}\nExercises: ${exercisesCompleted}/${totalExercises}\nNutrition: ${nutritionCompleted}/${totalNutrition}\n🎯 XP Earned: +${totalXP} XP`);
+      // Show success message based on save method
+      const saveMethod = savedSession.id?.startsWith('session_') ? 'locally' : 'to cloud';
+      alert(`✅ Session saved ${saveMethod}!\n${dayName}\nExercises: ${exercisesCompleted}/${totalExercises}\nNutrition: ${nutritionCompleted}/${totalNutrition}\n🎯 XP Earned: +${totalXP} XP`);
     } catch (error) {
       console.error('Error saving session:', error);
-      alert('❌ Failed to save session. Please try again.');
+      // Provide more helpful error message
+      alert('❌ Failed to save session. Your progress is still tracked locally. Please check your internet connection and try again.');
     } finally {
       setSaving(false);
     }
