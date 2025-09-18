@@ -5,9 +5,11 @@ import { DatabaseService, TrainingProgram, UserProgress } from '../lib/supabase'
 interface ProgramSelectionProps {
   onProgramSelect: (programId: string) => void;
   currentProgramId?: string;
+  isAuthenticated?: boolean;
+  onAuthRequired?: (programId: string) => void;
 }
 
-const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectionProps) => {
+const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated = false, onAuthRequired }: ProgramSelectionProps) => {
   const [programs, setPrograms] = useState<TrainingProgram[]>([]);
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
   const [loading, setLoading] = useState(true);
@@ -81,7 +83,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
           duration_weeks: 16,
           difficulty_level: 'intermediate',
           tags: ['intermediate', 'power', 'strength', 'explosive'],
-          is_premium: false, // Unlocked for all users
+          is_premium: true, // Premium program - requires authentication
           workout_structure: {
             phases: {
               build: {
@@ -120,7 +122,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
           duration_weeks: 20,
           difficulty_level: 'advanced',
           tags: ['advanced', 'elite', 'competition', 'maximum'],
-          is_premium: false, // Unlocked for all users
+          is_premium: true, // Premium program - requires authentication
           workout_structure: {
             phases: {
               foundation: {
@@ -173,8 +175,11 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
   };
 
   const isProgramUnlocked = (program: TrainingProgram): boolean => {
-    // All programs are now unlocked for all users
-    return true;
+    // Foundation Builder is always free
+    if (!program.is_premium) return true;
+
+    // Premium programs require authentication
+    return isAuthenticated;
   };
 
   const getProgressPercentage = (program: TrainingProgram): number => {
@@ -294,8 +299,8 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
       </div>
 
       {/* Programs Grid */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {programs.map((program) => {
             const isUnlocked = isProgramUnlocked(program);
             const isCurrent = program.id === currentProgramId;
@@ -309,10 +314,16 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
                 className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105 ${
                   isUnlocked ? 'cursor-pointer' : 'cursor-not-allowed opacity-75'
                 } ${isCompleted ? 'ring-2 ring-green-400 ring-opacity-50' : ''}`}
-                onClick={() => isUnlocked && onProgramSelect(program.id)}
+                onClick={() => {
+                  if (isUnlocked) {
+                    onProgramSelect(program.id);
+                  } else if (program.is_premium && !isAuthenticated && onAuthRequired) {
+                    onAuthRequired(program.id);
+                  }
+                }}
               >
                 {/* Card Header with Background Image */}
-                <div className="relative h-52 overflow-hidden">
+                <div className="relative h-60 overflow-hidden">
                   {/* Gradient Background */}
                   <div className={`absolute inset-0 ${getCardGradient(program)} opacity-90`}></div>
 
@@ -363,9 +374,9 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
                         <h3 className="text-2xl font-bold drop-shadow-lg leading-tight">{program.name}</h3>
                         <p className="text-sm opacity-95 leading-relaxed drop-shadow-md bg-black bg-opacity-30 backdrop-blur-sm rounded-lg p-3 overflow-hidden" style={{
                           display: '-webkit-box',
-                          WebkitLineClamp: 3,
+                          WebkitLineClamp: 4,
                           WebkitBoxOrient: 'vertical',
-                          maxHeight: '4.5rem'
+                          maxHeight: '6rem'
                         }}>
                           {program.description}
                         </p>
@@ -400,7 +411,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
                 </div>
 
                 {/* Card Body */}
-                <div className="p-6 bg-white">
+                <div className="p-6 bg-white min-h-[280px] flex flex-col">
                   {/* Program Stats */}
                   <div className="flex items-center justify-between mb-4">
                     <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(program.difficulty_level)}`}>
@@ -420,16 +431,16 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
                   </div>
 
                   {/* Features */}
-                  <div className="space-y-3">
+                  <div className="space-y-3 flex-1">
                     <h4 className="font-semibold text-gray-900 flex items-center gap-2">
                       <Target className="w-4 h-4 text-blue-600" />
                       Key Features
                     </h4>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2.5">
                       {features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          {feature}
+                        <li key={index} className="flex items-start gap-2 text-sm text-gray-700 leading-relaxed">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                          <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -468,12 +479,28 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
                         Restart Program
                       </button>
                     ) : program.is_premium ? (
-                      <button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isAuthenticated) {
+                            onProgramSelect(program.id);
+                          } else if (onAuthRequired) {
+                            onAuthRequired(program.id);
+                          }
+                        }}
+                        className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
+                      >
                         <Crown className="w-4 h-4" />
                         Start Program
                       </button>
                     ) : (
-                      <button className="w-full bg-green-600 text-white py-3 rounded-lg font-medium text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onProgramSelect(program.id);
+                        }}
+                        className="w-full bg-green-600 text-white py-3 rounded-lg font-medium text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                      >
                         Start Free Program
                         <ArrowRight className="w-4 h-4" />
                       </button>

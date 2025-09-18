@@ -847,6 +847,11 @@ const TrainingProgram = () => {
         <ProgramSelection
           onProgramSelect={handleProgramSelect}
           currentProgramId={currentProgramId}
+          isAuthenticated={isAuthenticated}
+          onAuthRequired={(programId) => {
+            setAuthTrigger('program-switch');
+            setShowAuthModal(true);
+          }}
         />
       </div>
     );
