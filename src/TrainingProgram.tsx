@@ -702,44 +702,48 @@ const TrainingProgram = () => {
       {/* Modern Enhanced Header */}
       <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 shadow-xl sticky top-0 z-10 border-b border-slate-700/50">
         <div className="p-3 sm:p-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
               <button
                 onClick={handleBackToProgramSelection}
-                className="p-1.5 sm:p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group"
+                className="p-1.5 hover:bg-white/10 rounded-xl transition-all duration-200 group flex-shrink-0"
                 title="Back to Program Selection"
               >
-                <ArrowLeft className="text-white/80 group-hover:text-white w-4 h-4 sm:w-5 sm:h-5 transition-colors" />
+                <ArrowLeft className="text-white/80 group-hover:text-white w-4 h-4 transition-colors" />
               </button>
-              <div className="p-1.5 sm:p-2 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl shadow-lg">
-                <Trophy className="text-white w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="p-1.5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl shadow-lg flex-shrink-0">
+                <Trophy className="text-white w-5 h-5" />
               </div>
               <div className="min-w-0 flex-1">
-                <h1 className="text-lg sm:text-xl font-bold text-white truncate">3x/Week Aesthetic</h1>
-                <p className="text-xs sm:text-sm text-blue-200/80 truncate">Build Your Best Physique</p>
+                <h1 className="text-base font-bold text-white truncate">3x/Week Aesthetic</h1>
+                <p className="text-xs text-blue-200/80 truncate">Build Your Best Physique</p>
               </div>
             </div>
-            <div className="flex items-center justify-between sm:justify-end gap-3">
+            <div className="flex items-center gap-2 flex-shrink-0">
               {timerPopup.isOpen && (
-                <div className="flex items-center gap-1.5 px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs font-medium shadow-lg">
+                <div className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs font-medium shadow-lg">
                   <Timer className="w-3 h-3 animate-pulse" />
                   <span>Timer</span>
                 </div>
               )}
               <div className="text-right">
-                <div className="text-xs sm:text-sm text-blue-200/70 font-medium">Progress</div>
-                <div className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+                <div className="text-xs text-blue-200/70 font-medium">Progress</div>
+                <div className="text-xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
                   {completionPercentage}%
                 </div>
-                {gamification.currentStreak > 0 && (
-                  <div className="flex items-center gap-1.5 text-xs text-orange-300 mt-1 bg-orange-500/20 px-1.5 py-0.5 rounded-lg">
-                    <span className="text-sm">🔥</span>
-                    <span className="font-semibold">{gamification.currentStreak} day streak</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>
+
+          {/* Streak info moved below */}
+          {gamification.currentStreak > 0 && (
+            <div className="flex justify-end mb-2">
+              <div className="flex items-center gap-1.5 text-xs text-orange-300 bg-orange-500/20 px-2 py-1 rounded-lg">
+                <span className="text-sm">🔥</span>
+                <span className="font-semibold">{gamification.currentStreak} day streak</span>
+              </div>
+            </div>
+          )}
 
           {/* Enhanced Phase Info */}
           <div className={`${phaseInfo.color} text-white p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 shadow-lg bg-gradient-to-r ${currentPhase === 'foundation' ? 'from-blue-600 to-blue-700' : currentPhase === 'growth' ? 'from-green-600 to-emerald-700' : 'from-red-600 to-rose-700'}`}>
@@ -1006,92 +1010,92 @@ const TrainingProgram = () => {
                           </div>
 
                           {exercise.rest !== "N/A" && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 bg-blue-50 px-3 py-2 rounded-xl">
-                              <div className="p-1 bg-blue-500 rounded-full">
-                                <Clock className="w-3 h-3 text-white" />
+                            <div className="flex items-center gap-2 text-xs text-gray-600 mb-3 bg-blue-50 px-2 py-1.5 rounded-lg">
+                              <div className="p-0.5 bg-blue-500 rounded-full">
+                                <Clock className="w-2.5 h-2.5 text-white" />
                               </div>
                               <span className="font-semibold">Rest: {exercise.rest}</span>
                             </div>
                           )}
 
-                          {/* Exercise Description - Bigger and More Prominent */}
-                          <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 mb-4 sm:mb-6 shadow-sm">
-                            <div className="flex items-start gap-2 mb-3">
-                              <div className="p-1.5 bg-blue-100 rounded-lg">
-                                <FileText className="w-4 h-4 text-blue-600" />
+                          {/* Exercise Description - Mobile Optimized */}
+                          <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
+                            <div className="flex items-start gap-2 mb-2">
+                              <div className="p-1 bg-blue-100 rounded-md flex-shrink-0">
+                                <FileText className="w-3 h-3 text-blue-600" />
                               </div>
-                              <h4 className="font-semibold text-gray-800 text-sm">Exercise Instructions</h4>
+                              <h4 className="font-semibold text-gray-800 text-xs">Exercise Instructions</h4>
                             </div>
-                            <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-medium">{exercise.notes}</p>
+                            <p className="text-sm text-gray-700 leading-snug">{exercise.notes}</p>
                           </div>
                         </div>
                       </div>
 
                       {/* Enhanced Weight Tracking & Controls */}
-                      <div className="bg-white p-4 sm:p-5 rounded-xl shadow-sm border border-gray-200 space-y-4">
+                      <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 space-y-3">
                         {/* Enhanced Weight Tracking */}
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="p-1.5 bg-purple-100 rounded-lg">
-                              <span className="text-lg">🏋️</span>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <div className="p-1 bg-purple-100 rounded-md">
+                              <span className="text-sm">🏋️</span>
                             </div>
-                            <h4 className="font-semibold text-gray-800 text-sm">Weight Tracking</h4>
+                            <h4 className="font-semibold text-gray-800 text-xs">Weight Tracking</h4>
                           </div>
-                          <div className="flex items-center justify-between bg-gray-50 p-3 rounded-xl">
-                            <span className="text-sm font-medium text-gray-700">Current Weight:</span>
-                            <div className="flex items-center gap-2">
+                          <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+                            <span className="text-xs font-medium text-gray-700">Weight:</span>
+                            <div className="flex items-center gap-1.5">
                               <button
                                 onClick={() => updateWeight(dayName, index, -2.5)}
-                                className="w-9 h-9 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                                className="w-7 h-7 bg-red-500 text-white rounded-md flex items-center justify-center hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
                               >
-                                <Minus className="w-4 h-4" />
+                                <Minus className="w-3 h-3" />
                               </button>
-                              <span className="w-16 text-center font-mono text-base font-bold bg-white py-2 px-3 rounded-lg border border-gray-300 shadow-sm">
+                              <span className="w-12 text-center font-mono text-sm font-bold bg-white py-1 px-2 rounded-md border border-gray-300">
                                 {currentWeight}kg
                               </span>
                               <button
                                 onClick={() => updateWeight(dayName, index, 2.5)}
-                                className="w-9 h-9 bg-green-500 text-white rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                                className="w-7 h-7 bg-green-500 text-white rounded-md flex items-center justify-center hover:bg-green-600 transition-colors duration-200 touch-manipulation active:scale-95"
                               >
-                                <Plus className="w-4 h-4" />
+                                <Plus className="w-3 h-3" />
                               </button>
                             </div>
                           </div>
                         </div>
 
                         {/* Enhanced Actions */}
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-blue-100 rounded-lg">
-                              <span className="text-lg">⚡</span>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <div className="p-1 bg-blue-100 rounded-md">
+                              <span className="text-sm">⚡</span>
                             </div>
-                            <h4 className="font-semibold text-gray-800 text-sm">Quick Actions</h4>
+                            <h4 className="font-semibold text-gray-800 text-xs">Quick Actions</h4>
                           </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div className="grid grid-cols-3 gap-1.5">
                             <button
                               onClick={() => launchTimer(dayName, index, exercise)}
-                              className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                              className="flex items-center justify-center gap-1 px-2 py-2 bg-purple-500 text-white text-xs font-medium rounded-md hover:bg-purple-600 transition-colors duration-200 touch-manipulation active:scale-95"
                               title="Open workout timer"
                             >
-                              <Timer className="w-4 h-4" />
+                              <Timer className="w-3 h-3" />
                               Timer
                             </button>
                             <a
                               href={demos.video + exercise.name.replace(/\s+/g, '+')}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                              className="flex items-center justify-center gap-1 px-2 py-2 bg-red-500 text-white text-xs font-medium rounded-md hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             >
-                              <Play className="w-4 h-4" />
+                              <Play className="w-3 h-3" />
                               Video
                             </a>
                             <a
                               href={demos.guide + exercise.name.replace(/\s+/g, '+')}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                              className="flex items-center justify-center gap-1 px-2 py-2 bg-blue-500 text-white text-xs font-medium rounded-md hover:bg-blue-600 transition-colors duration-200 touch-manipulation active:scale-95"
                             >
-                              <FileText className="w-4 h-4" />
+                              <FileText className="w-3 h-3" />
                               Guide
                             </a>
                           </div>
