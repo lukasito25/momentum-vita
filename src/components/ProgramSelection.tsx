@@ -81,7 +81,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
           duration_weeks: 16,
           difficulty_level: 'intermediate',
           tags: ['intermediate', 'power', 'strength', 'explosive'],
-          is_premium: false, // Temporarily unlocked for testing
+          is_premium: false, // Unlocked for all users
           workout_structure: {
             phases: {
               build: {
@@ -120,7 +120,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
           duration_weeks: 20,
           difficulty_level: 'advanced',
           tags: ['advanced', 'elite', 'competition', 'maximum'],
-          is_premium: false, // Temporarily unlocked for testing
+          is_premium: false, // Unlocked for all users
           workout_structure: {
             phases: {
               foundation: {

@@ -174,7 +174,7 @@ export class MigrationUtility {
           duration_weeks: 12,
           difficulty_level: 'intermediate',
           tags: ['intermediate', 'power', 'strength'],
-          is_premium: true,
+          is_premium: false, // Unlocked for all users
           workout_structure: {
             phases: {
               build: {
@@ -207,7 +207,7 @@ export class MigrationUtility {
           duration_weeks: 12,
           difficulty_level: 'advanced',
           tags: ['advanced', 'elite', 'maximum'],
-          is_premium: true,
+          is_premium: false, // Unlocked for all users
           workout_structure: {
             phases: {
               preparation: {
