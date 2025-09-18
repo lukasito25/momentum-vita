@@ -25,9 +25,9 @@ import { useAuth } from './contexts/AuthContext';
 import AuthModal from './components/AuthModal';
 
 const TrainingProgram = () => {
-  // Authentication hooks
+  // Authentication hooks - now with defensive context
   const { user, login, isAuthenticated, isLoading: authLoading } = useAuth();
-  const hasEnhancedMode = isAuthenticated; // Simplified - enhanced mode available to authenticated users
+  const hasEnhancedMode = isAuthenticated; // Enhanced mode for authenticated users
 
   const [currentWeek, setCurrentWeek] = useState(1);
   const [completedExercises, setCompletedExercises] = useState<Record<string, boolean>>({});

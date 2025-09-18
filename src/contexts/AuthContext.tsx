@@ -18,14 +18,25 @@ interface AuthContextType {
   updateUser: (updates: Partial<User>) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Create context with default values to prevent undefined errors
+const defaultAuthContext: AuthContextType = {
+  user: null,
+  isLoading: false,
+  isAuthenticated: false,
+  login: async () => {},
+  logout: async () => {},
+  updateUser: async () => {}
+};
+
+const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     // More detailed error for debugging
     console.error('useAuth called outside AuthProvider. Make sure AuthProvider wraps your component.');
-    throw new Error('useAuth must be used within an AuthProvider');
+    // Return default context instead of throwing error
+    return defaultAuthContext;
   }
   return context;
 };
@@ -137,14 +148,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-// Hook for checking if enhanced features should be available
-export const useEnhancedFeatures = () => {
-  const { isAuthenticated } = useAuth();
-
-  return {
-    hasEnhancedMode: isAuthenticated,
-    hasCloudSync: isAuthenticated,
-    hasAdvancedAnalytics: isAuthenticated,
-    hasProgressBackup: isAuthenticated
-  };
-};
+// Enhanced features are now handled directly in components using isAuthenticated
+// This hook is no longer needed to avoid circular dependencies
