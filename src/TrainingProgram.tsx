@@ -21,13 +21,13 @@ import type { TimerExercise } from './components/WorkoutTimer';
 import { ExerciseSetTracking, SetData, WorkoutSessionData } from './types/SetTracking';
 import { beastModeEliteWorkouts } from './data/beast-mode-elite';
 import { powerSurgeProWorkouts } from './data/power-surge-pro';
-import { useAuth, useEnhancedFeatures } from './contexts/AuthContext';
+import { useAuth } from './contexts/AuthContext';
 import AuthModal from './components/AuthModal';
 
 const TrainingProgram = () => {
   // Authentication hooks
-  const { user, login, isAuthenticated } = useAuth();
-  const { hasEnhancedMode } = useEnhancedFeatures();
+  const { user, login, isAuthenticated, isLoading: authLoading } = useAuth();
+  const hasEnhancedMode = isAuthenticated; // Simplified - enhanced mode available to authenticated users
 
   const [currentWeek, setCurrentWeek] = useState(1);
   const [completedExercises, setCompletedExercises] = useState<Record<string, boolean>>({});
@@ -816,10 +816,10 @@ const TrainingProgram = () => {
     return 'push'; // Default fallback
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <LoadingScreen
-        message="Loading your training data..."
+        message={authLoading ? "Initializing..." : "Loading your training data..."}
         type="general"
         showProgress={false}
       />

@@ -23,6 +23,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
+    // More detailed error for debugging
+    console.error('useAuth called outside AuthProvider. Make sure AuthProvider wraps your component.');
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
