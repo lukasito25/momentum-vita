@@ -835,7 +835,7 @@ const TrainingProgram = () => {
       </div>
 
       {/* Enhanced Workout Days */}
-      <div className="px-4 pb-6 space-y-6">
+      <div className="px-3 sm:px-4 pb-6 space-y-4 sm:space-y-6">
         {Object.entries(workouts).map(([dayName, workout]) => {
           const exercises = workout.exercises[currentPhase];
           const dayCompleted = exercises.every((_, index) =>
@@ -846,9 +846,9 @@ const TrainingProgram = () => {
           ).length;
 
           return (
-            <div key={dayName} className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-white/50 transform transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
+            <div key={dayName} className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-white/50 transform transition-all duration-300 hover:shadow-2xl hover:scale-[1.01]">
               {/* Enhanced Day Header with Background Image */}
-              <div className="relative h-32 overflow-hidden">
+              <div className="relative h-24 sm:h-32 overflow-hidden">
                 {/* Background Image */}
                 <ProgressiveImage
                   src={workoutImages.getWorkoutImage(getWorkoutImageType(dayName))?.url || ''}
@@ -867,26 +867,28 @@ const TrainingProgram = () => {
                 <div className={`absolute inset-0 bg-gradient-to-r ${workout.color === 'bg-red-600' ? 'from-red-600/90 via-red-700/90 to-rose-800/90' : workout.color === 'bg-blue-600' ? 'from-blue-600/90 via-blue-700/90 to-indigo-800/90' : 'from-green-600/90 via-green-700/90 to-emerald-800/90'}`}></div>
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 p-5 text-white flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm border border-white/30 shadow-lg">
-                      {workout.color === 'bg-red-600' && <span className="text-2xl drop-shadow-md">💪</span>}
-                      {workout.color === 'bg-blue-600' && <span className="text-2xl drop-shadow-md">🎯</span>}
-                      {workout.color === 'bg-green-600' && <span className="text-2xl drop-shadow-md">🏃</span>}
+                <div className="absolute inset-0 p-3 sm:p-5 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                    <div className="p-2 sm:p-3 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm border border-white/30 shadow-lg">
+                      <span className="text-lg sm:text-2xl drop-shadow-md">
+                        {workout.color === 'bg-red-600' && '💪'}
+                        {workout.color === 'bg-blue-600' && '🎯'}
+                        {workout.color === 'bg-green-600' && '🏃'}
+                      </span>
                     </div>
-                    <div>
-                      <h2 className="text-xl font-bold leading-tight drop-shadow-lg">
+                    <div className="min-w-0 flex-1">
+                      <h2 className="text-base sm:text-xl font-bold leading-tight drop-shadow-lg truncate">
                         {dayName.split(' - ')[0]}
                       </h2>
-                      <p className="text-sm opacity-95 font-medium drop-shadow-md bg-black/20 backdrop-blur-sm px-2 py-1 rounded-lg">
+                      <p className="text-xs sm:text-sm opacity-95 font-medium drop-shadow-md bg-black/20 backdrop-blur-sm px-2 py-1 rounded-lg truncate">
                         {dayName.split(' - ')[1]}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30 shadow-lg">
-                      <div className="text-lg font-bold drop-shadow-md">
+                  <div className="flex items-center gap-2 sm:gap-4">
+                    <div className="flex flex-col items-center bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-white/30 shadow-lg">
+                      <div className="text-sm sm:text-lg font-bold drop-shadow-md">
                         {dayProgress}/{exercises.length}
                       </div>
                       <div className="text-xs opacity-90 font-medium">Exercises</div>
@@ -901,7 +903,7 @@ const TrainingProgram = () => {
               </div>
 
               {/* Exercises - Enhanced or Standard Mode */}
-              <div className="p-4 space-y-4">
+              <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
                 {exercises.map((exercise, index) => {
                   const isCompleted = completedExercises[`${dayName}-${index}-week${currentWeek}`];
                   const currentWeight = exerciseWeights[`${dayName}-${index}-week${currentWeek}`] || getLastUsedWeight(dayName, index, currentWeek);
@@ -952,43 +954,44 @@ const TrainingProgram = () => {
                   return (
                     <div
                       key={index}
-                      className={`p-4 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] ${
+                      className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-[1.01] ${
                         isCompleted
                           ? 'bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 shadow-lg'
                           : 'bg-gradient-to-r from-gray-50 to-slate-50 border border-gray-200 hover:shadow-lg hover:from-blue-50 hover:to-indigo-50'
                       } ${isArmFocus ? 'ring-2 ring-orange-400 ring-opacity-50 bg-gradient-to-r from-orange-50 to-amber-50' : ''}`}
                     >
                       {/* Enhanced Exercise Header */}
-                      <div className="flex items-start gap-4 mb-4">
+                      <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                         <button
                           onClick={() => toggleExercise(dayName, index)}
-                          className="mt-1 flex-shrink-0 touch-manipulation group"
+                          className="mt-1 flex-shrink-0 touch-manipulation group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full"
+                          aria-label={`${isCompleted ? 'Mark as incomplete' : 'Mark as complete'}: ${exercise.name}`}
                         >
                           {isCompleted ? (
-                            <div className="p-1 bg-green-500 rounded-full shadow-lg">
-                              <CheckCircle2 className="w-6 h-6 text-white" />
+                            <div className="p-1.5 bg-green-500 rounded-full shadow-lg">
+                              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                             </div>
                           ) : (
-                            <div className="p-1 border-2 border-gray-300 rounded-full group-hover:border-blue-400 transition-colors">
-                              <Circle className="w-6 h-6 text-gray-400 group-hover:text-blue-400" />
+                            <div className="p-1.5 border-2 border-gray-300 rounded-full group-hover:border-blue-400 transition-colors">
+                              <Circle className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 group-hover:text-blue-400" />
                             </div>
                           )}
                         </button>
 
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <h3 className={`font-bold text-base leading-tight ${isCompleted ? 'text-green-800' : 'text-gray-800'}`}>
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-3 sm:mb-2 gap-2 sm:gap-0">
+                            <div className="min-w-0 flex-1">
+                              <h3 className={`font-bold text-lg sm:text-xl leading-tight ${isCompleted ? 'text-green-800' : 'text-gray-800'}`}>
                                 {exercise.name}
                                 {isArmFocus && (
-                                  <span className="ml-2 inline-flex items-center gap-1 text-xs bg-gradient-to-r from-orange-400 to-amber-500 text-white px-2 py-1 rounded-full font-bold shadow-sm">
+                                  <span className="block sm:inline sm:ml-2 mt-1 sm:mt-0 inline-flex items-center gap-1 text-xs bg-gradient-to-r from-orange-400 to-amber-500 text-white px-2 py-1 rounded-full font-bold shadow-sm w-fit">
                                     <span>💪</span> ARM
                                   </span>
                                 )}
                               </h3>
                             </div>
-                            <div className="flex items-center gap-2 ml-3">
-                              <span className="font-mono bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-3 py-1.5 rounded-xl text-sm font-bold shadow-sm">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-3 py-2 rounded-xl text-sm font-bold shadow-sm">
                                 {exercise.sets}
                               </span>
                               {isCompleted && (
@@ -1000,7 +1003,7 @@ const TrainingProgram = () => {
                           </div>
 
                           {exercise.rest !== "N/A" && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600 mb-3 bg-blue-50 px-3 py-2 rounded-xl">
+                            <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 bg-blue-50 px-3 py-2 rounded-xl">
                               <div className="p-1 bg-blue-500 rounded-full">
                                 <Clock className="w-3 h-3 text-white" />
                               </div>
@@ -1008,62 +1011,87 @@ const TrainingProgram = () => {
                             </div>
                           )}
 
-                          <p className="text-sm text-gray-700 mb-4 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">{exercise.notes}</p>
+                          {/* Exercise Description - Bigger and More Prominent */}
+                          <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 mb-4 sm:mb-6 shadow-sm">
+                            <div className="flex items-start gap-2 mb-3">
+                              <div className="p-1.5 bg-blue-100 rounded-lg">
+                                <FileText className="w-4 h-4 text-blue-600" />
+                              </div>
+                              <h4 className="font-semibold text-gray-800 text-sm">Exercise Instructions</h4>
+                            </div>
+                            <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-medium">{exercise.notes}</p>
+                          </div>
                         </div>
                       </div>
 
                       {/* Enhanced Weight Tracking & Controls */}
-                      <div className="bg-white p-2.5 rounded-lg shadow-sm border border-gray-200 space-y-2.5">
+                      <div className="bg-white p-4 sm:p-5 rounded-xl shadow-sm border border-gray-200 space-y-4">
                         {/* Enhanced Weight Tracking */}
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-700">Weight:</span>
-                          <div className="flex items-center gap-1.5">
-                            <button
-                              onClick={() => updateWeight(dayName, index, -2.5)}
-                              className="w-7 h-7 bg-red-500 text-white rounded-md flex items-center justify-center hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
-                            >
-                              <Minus className="w-3 h-3" />
-                            </button>
-                            <span className="w-14 text-center font-mono text-sm font-semibold bg-gray-100 py-1 px-1.5 rounded-md border border-gray-300">
-                              {currentWeight}kg
-                            </span>
-                            <button
-                              onClick={() => updateWeight(dayName, index, 2.5)}
-                              className="w-7 h-7 bg-green-500 text-white rounded-md flex items-center justify-center hover:bg-green-600 transition-colors duration-200 touch-manipulation active:scale-95"
-                            >
-                              <Plus className="w-3 h-3" />
-                            </button>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 bg-purple-100 rounded-lg">
+                              <span className="text-lg">🏋️</span>
+                            </div>
+                            <h4 className="font-semibold text-gray-800 text-sm">Weight Tracking</h4>
+                          </div>
+                          <div className="flex items-center justify-between bg-gray-50 p-3 rounded-xl">
+                            <span className="text-sm font-medium text-gray-700">Current Weight:</span>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => updateWeight(dayName, index, -2.5)}
+                                className="w-9 h-9 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                              >
+                                <Minus className="w-4 h-4" />
+                              </button>
+                              <span className="w-16 text-center font-mono text-base font-bold bg-white py-2 px-3 rounded-lg border border-gray-300 shadow-sm">
+                                {currentWeight}kg
+                              </span>
+                              <button
+                                onClick={() => updateWeight(dayName, index, 2.5)}
+                                className="w-9 h-9 bg-green-500 text-white rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                              >
+                                <Plus className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
                         </div>
 
-                        {/* Enhanced Timer and Demo Links */}
-                        <div className="grid grid-cols-3 gap-1.5">
-                          <button
-                            onClick={() => launchTimer(dayName, index, exercise)}
-                            className="flex items-center justify-center gap-1 px-2 py-1.5 bg-purple-500 text-white text-xs font-medium rounded-md hover:bg-purple-600 transition-colors duration-200 touch-manipulation active:scale-95"
-                            title="Open workout timer"
-                          >
-                            <Timer className="w-3 h-3" />
-                            Timer
-                          </button>
-                          <a
-                            href={demos.video + exercise.name.replace(/\s+/g, '+')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-1 px-2 py-1.5 bg-red-500 text-white text-xs font-medium rounded-md hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95"
-                          >
-                            <Play className="w-3 h-3" />
-                            Video
-                          </a>
-                          <a
-                            href={demos.guide + exercise.name.replace(/\s+/g, '+')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-1 px-2 py-1.5 bg-blue-500 text-white text-xs font-medium rounded-md hover:bg-blue-600 transition-colors duration-200 touch-manipulation active:scale-95"
-                          >
-                            <FileText className="w-3 h-3" />
-                            Guide
-                          </a>
+                        {/* Enhanced Actions */}
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-blue-100 rounded-lg">
+                              <span className="text-lg">⚡</span>
+                            </div>
+                            <h4 className="font-semibold text-gray-800 text-sm">Quick Actions</h4>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <button
+                              onClick={() => launchTimer(dayName, index, exercise)}
+                              className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                              title="Open workout timer"
+                            >
+                              <Timer className="w-4 h-4" />
+                              Timer
+                            </button>
+                            <a
+                              href={demos.video + exercise.name.replace(/\s+/g, '+')}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                            >
+                              <Play className="w-4 h-4" />
+                              Video
+                            </a>
+                            <a
+                              href={demos.guide + exercise.name.replace(/\s+/g, '+')}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200 touch-manipulation active:scale-95 shadow-sm"
+                            >
+                              <FileText className="w-4 h-4" />
+                              Guide
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1160,35 +1188,35 @@ const TrainingProgram = () => {
                 </div>
 
                 {/* Enhanced Nutrition Summary */}
-                <div className="mt-4 p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl border border-blue-200 shadow-lg">
+                <div className="mt-4 p-3 sm:p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl sm:rounded-2xl border border-blue-200 shadow-lg">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="p-2 bg-blue-500 rounded-xl">
-                      <span className="text-lg">🎯</span>
+                    <div className="p-1.5 sm:p-2 bg-blue-500 rounded-lg sm:rounded-xl">
+                      <span className="text-base sm:text-lg">🎯</span>
                     </div>
-                    <h4 className="font-bold text-blue-800">Nutrition Guidelines</h4>
+                    <h4 className="font-bold text-blue-800 text-sm sm:text-base">Nutrition Guidelines</h4>
                   </div>
-                  <div className="text-sm text-blue-800">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div className="bg-white/70 p-3 rounded-xl"><strong>Target Protein:</strong> 156g/day</div>
-                      <div className="bg-white/70 p-3 rounded-xl"><strong>Meal Timing:</strong> Every 4-5h</div>
-                      <div className="bg-white/70 p-3 rounded-xl"><strong>Pre-workout:</strong> Light carbs</div>
-                      <div className="bg-white/70 p-3 rounded-xl"><strong>Post-workout:</strong> Protein + carbs</div>
-                      <div className="bg-white/70 p-3 rounded-xl"><strong>Supplements:</strong> Daily stack</div>
-                      <div className="bg-white/70 p-3 rounded-xl"><strong>Best Time:</strong> With meals</div>
+                  <div className="text-xs sm:text-sm text-blue-800">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                      <div className="bg-white/70 p-2.5 sm:p-3 rounded-lg sm:rounded-xl"><strong>Target Protein:</strong> 156g/day</div>
+                      <div className="bg-white/70 p-2.5 sm:p-3 rounded-lg sm:rounded-xl"><strong>Meal Timing:</strong> Every 4-5h</div>
+                      <div className="bg-white/70 p-2.5 sm:p-3 rounded-lg sm:rounded-xl"><strong>Pre-workout:</strong> Light carbs</div>
+                      <div className="bg-white/70 p-2.5 sm:p-3 rounded-lg sm:rounded-xl"><strong>Post-workout:</strong> Protein + carbs</div>
+                      <div className="bg-white/70 p-2.5 sm:p-3 rounded-lg sm:rounded-xl"><strong>Supplements:</strong> Daily stack</div>
+                      <div className="bg-white/70 p-2.5 sm:p-3 rounded-lg sm:rounded-xl"><strong>Best Time:</strong> With meals</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Enhanced Save Session Button */}
-                <div className="mt-5 pt-4 border-t-2 border-gray-200">
+                <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t-2 border-gray-200">
                   <button
                     onClick={() => saveSession(dayName)}
                     disabled={saving}
-                    className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-2xl hover:from-green-700 hover:to-emerald-800 transition-all duration-300 font-bold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:scale-105 group"
+                    className="w-full flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl sm:rounded-2xl hover:from-green-700 hover:to-emerald-800 transition-all duration-300 font-bold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:scale-105 group touch-manipulation"
                   >
-                    <Save className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                    <Save className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform" />
                     <span>{saving ? 'Saving to Cloud...' : 'Save Session to Cloud'}</span>
-                    {!saving && <span className="text-lg">☁️</span>}
+                    {!saving && <span className="text-base sm:text-lg">☁️</span>}
                   </button>
                 </div>
               </div>
@@ -1198,48 +1226,60 @@ const TrainingProgram = () => {
       </div>
 
       {/* Enhanced Goals & Stats */}
-      <div className="px-4 pb-8 space-y-6">
+      <div className="px-3 sm:px-4 pb-6 sm:pb-8 space-y-4 sm:space-y-6">
         {/* Enhanced Quick Stats Cards */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-2xl p-4 text-center shadow-xl transform transition-all duration-300 hover:scale-105">
-            <div className="text-2xl font-bold mb-1">{currentWeek}</div>
-            <div className="text-sm opacity-90 font-medium">Week</div>
-            <div className="text-3xl mt-2">📅</div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-xl sm:rounded-2xl p-4 sm:p-5 text-center shadow-xl transform transition-all duration-300 hover:scale-105">
+            <div className="flex items-center justify-center gap-3 sm:block">
+              <div className="text-3xl sm:text-4xl mb-0 sm:mb-2">📅</div>
+              <div className="text-left sm:text-center">
+                <div className="text-xl sm:text-2xl font-bold mb-1">Week {currentWeek}</div>
+                <div className="text-sm opacity-90 font-medium">Current Progress</div>
+              </div>
+            </div>
           </div>
-          <div className="bg-gradient-to-br from-green-500 to-emerald-700 text-white rounded-2xl p-4 text-center shadow-xl transform transition-all duration-300 hover:scale-105">
-            <div className="text-2xl font-bold mb-1">{stats.completed}</div>
-            <div className="text-sm opacity-90 font-medium">Exercises</div>
-            <div className="text-3xl mt-2">💪</div>
+          <div className="bg-gradient-to-br from-green-500 to-emerald-700 text-white rounded-xl sm:rounded-2xl p-4 sm:p-5 text-center shadow-xl transform transition-all duration-300 hover:scale-105">
+            <div className="flex items-center justify-center gap-3 sm:block">
+              <div className="text-3xl sm:text-4xl mb-0 sm:mb-2">💪</div>
+              <div className="text-left sm:text-center">
+                <div className="text-xl sm:text-2xl font-bold mb-1">{stats.completed}</div>
+                <div className="text-sm opacity-90 font-medium">Exercises Done</div>
+              </div>
+            </div>
           </div>
-          <div className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white rounded-2xl p-4 text-center shadow-xl transform transition-all duration-300 hover:scale-105">
-            <div className="text-2xl font-bold mb-1">{gamification.totalXP.toLocaleString()}</div>
-            <div className="text-sm opacity-90 font-medium">Total XP</div>
-            <div className="text-3xl mt-2">✨</div>
+          <div className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white rounded-xl sm:rounded-2xl p-4 sm:p-5 text-center shadow-xl transform transition-all duration-300 hover:scale-105">
+            <div className="flex items-center justify-center gap-3 sm:block">
+              <div className="text-3xl sm:text-4xl mb-0 sm:mb-2">✨</div>
+              <div className="text-left sm:text-center">
+                <div className="text-xl sm:text-2xl font-bold mb-1">{gamification.totalXP.toLocaleString()}</div>
+                <div className="text-sm opacity-90 font-medium">Total XP</div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Enhanced 3x/Week Specific Goals */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-300 rounded-2xl p-5 shadow-xl">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl shadow-lg">
-              <span className="text-2xl">🎯</span>
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-300 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-xl">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4">
+            <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg sm:rounded-xl shadow-lg">
+              <span className="text-lg sm:text-2xl">🎯</span>
             </div>
-            <h3 className="font-bold text-blue-800 text-lg">3x/Week Realistic Targets</h3>
+            <h3 className="font-bold text-blue-800 text-base sm:text-lg">Realistic Targets</h3>
           </div>
-          <div className="text-sm text-blue-700 space-y-3">
-            <div className="flex justify-between bg-white/70 p-3 rounded-xl">
+          <div className="text-xs sm:text-sm text-blue-700 space-y-2 sm:space-y-3">
+            <div className="flex flex-col sm:flex-row sm:justify-between bg-white/70 p-3 rounded-xl gap-1 sm:gap-0">
               <span className="font-semibold">Arms (Week 0: 34.5cm):</span>
               <span className="font-mono font-bold text-blue-800">Week 12: 36.5cm (+2cm)</span>
             </div>
-            <div className="flex justify-between bg-white/70 p-3 rounded-xl">
+            <div className="flex flex-col sm:flex-row sm:justify-between bg-white/70 p-3 rounded-xl gap-1 sm:gap-0">
               <span className="font-semibold">Chest (Week 0: 100.5cm):</span>
               <span className="font-mono font-bold text-blue-800">Week 12: 105cm (+4.5cm)</span>
             </div>
-            <div className="flex justify-between bg-white/70 p-3 rounded-xl">
+            <div className="flex flex-col sm:flex-row sm:justify-between bg-white/70 p-3 rounded-xl gap-1 sm:gap-0">
               <span className="font-semibold">Weight (Week 0: 77.4kg):</span>
               <span className="font-mono font-bold text-blue-800">Week 12: 82-83kg (+5kg)</span>
             </div>
-            <div className="flex justify-between bg-white/70 p-3 rounded-xl">
+            <div className="flex flex-col sm:flex-row sm:justify-between bg-white/70 p-3 rounded-xl gap-1 sm:gap-0">
               <span className="font-semibold">Daily Protein:</span>
               <span className="font-mono font-bold text-blue-800">156g (39g x 4 meals)</span>
             </div>

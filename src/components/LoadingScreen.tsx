@@ -42,28 +42,28 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
 
       {/* Content */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center space-y-8 px-4 max-w-md">
+        <div className="text-center space-y-6 sm:space-y-8 px-4 max-w-md">
           {/* Logo/Icon */}
           <div className="relative">
-            <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
-              <Trophy className="w-12 h-12 text-white" />
+            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
+              <Trophy className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
             </div>
 
             {/* Floating Icons Animation */}
-            <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center animate-bounce shadow-lg">
-              <Dumbbell className="w-4 h-4 text-white" />
+            <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center animate-bounce shadow-lg">
+              <Dumbbell className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
             </div>
-            <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
-              <Target className="w-4 h-4 text-white" />
+            <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
+              <Target className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
             </div>
           </div>
 
           {/* App Name */}
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-white drop-shadow-lg">
+            <h1 className="text-2xl sm:text-4xl font-bold text-white drop-shadow-lg">
               3x/Week Aesthetic
             </h1>
-            <p className="text-blue-200 text-lg font-medium drop-shadow-md">
+            <p className="text-blue-200 text-base sm:text-lg font-medium drop-shadow-md">
               Build Your Best Physique
             </p>
           </div>
