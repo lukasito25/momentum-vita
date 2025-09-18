@@ -173,18 +173,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId }: ProgramSelectio
   };
 
   const isProgramUnlocked = (program: TrainingProgram): boolean => {
-    if (!program.is_premium) return true;
-    if (!userProgress) return false;
-
-    // Foundation Builder unlocks everything for now
-    // In real app, you'd check prerequisites
-    if (program.id === 'power-surge-pro') {
-      return userProgress.programs_completed.includes('foundation-builder');
-    }
-    if (program.id === 'beast-mode-elite') {
-      return userProgress.programs_completed.includes('power-surge-pro');
-    }
-
+    // All programs are now unlocked for all users
     return true;
   };
 
