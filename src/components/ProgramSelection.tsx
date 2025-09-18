@@ -299,8 +299,8 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
       </div>
 
       {/* Programs Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {programs.map((program) => {
             const isUnlocked = isProgramUnlocked(program);
             const isCurrent = program.id === currentProgramId;
@@ -311,9 +311,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
             return (
               <div
                 key={program.id}
-                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105 ${
-                  isUnlocked ? 'cursor-pointer' : 'cursor-not-allowed opacity-75'
-                } ${isCompleted ? 'ring-2 ring-green-400 ring-opacity-50' : ''}`}
+                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105 cursor-pointer ${isCompleted ? 'ring-2 ring-green-400 ring-opacity-50' : ''}`}
                 onClick={() => {
                   if (isUnlocked) {
                     onProgramSelect(program.id);
@@ -359,12 +357,6 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                           </div>
                         )}
 
-                        {/* Lock Overlay */}
-                        {!isUnlocked && (
-                          <div className="bg-black bg-opacity-40 backdrop-blur-sm text-white p-2 rounded-full shadow-lg">
-                            <Lock className="w-5 h-5" />
-                          </div>
-                        )}
                       </div>
                     </div>
 
@@ -448,15 +440,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
 
                   {/* Action Button */}
                   <div className="mt-6">
-                    {!isUnlocked ? (
-                      <button
-                        disabled
-                        className="w-full bg-gray-300 text-gray-500 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 cursor-not-allowed"
-                      >
-                        <Lock className="w-4 h-4" />
-                        Locked
-                      </button>
-                    ) : isCurrent ? (
+                    {isCurrent ? (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -478,20 +462,29 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                         <Trophy className="w-4 h-4" />
                         Restart Program
                       </button>
-                    ) : program.is_premium ? (
+                    ) : program.is_premium && !isAuthenticated ? (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (isAuthenticated) {
-                            onProgramSelect(program.id);
-                          } else if (onAuthRequired) {
+                          if (onAuthRequired) {
                             onAuthRequired(program.id);
                           }
                         }}
                         className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
                       >
                         <Crown className="w-4 h-4" />
-                        Start Program
+                        Unlock Premium Program
+                      </button>
+                    ) : program.is_premium && isAuthenticated ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onProgramSelect(program.id);
+                        }}
+                        className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Crown className="w-4 h-4" />
+                        Start Premium Program
                       </button>
                     ) : (
                       <button
