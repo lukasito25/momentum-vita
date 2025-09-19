@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate PNG Icon</title>
+</head>
+<body>
+    <h1>Generate PNG Icon from SVG</h1>
+    <canvas id="canvas" width="512" height="512" style="border: 1px solid #ccc;"></canvas>
+    <br><br>
+    <button id="download192">Download 192x192 PNG</button>
+    <button id="download512">Download 512x512 PNG</button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Create the icon programmatically
+        function drawIcon() {
+            // Background gradient
+            const bgGradient = ctx.createLinearGradient(0, 0, 512, 512);
+            bgGradient.addColorStop(0, '#1e40af');
+            bgGradient.addColorStop(0.5, '#3b82f6');
+            bgGradient.addColorStop(1, '#60a5fa');
+
+            // Background circle
+            ctx.fillStyle = bgGradient;
+            ctx.beginPath();
+            ctx.arc(256, 256, 256, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Orange gradient for barbell
+            const orangeGradient = ctx.createLinearGradient(0, 0, 512, 0);
+            orangeGradient.addColorStop(0, '#f59e0b');
+            orangeGradient.addColorStop(1, '#ea580c');
+
+            // Green gradient
+            const greenGradient = ctx.createLinearGradient(0, 0, 512, 512);
+            greenGradient.addColorStop(0, '#10b981');
+            greenGradient.addColorStop(1, '#059669');
+
+            // Left barbell weight
+            ctx.fillStyle = orangeGradient;
+            ctx.roundRect(80, 220, 60, 72, 8);
+            ctx.fill();
+
+            // Barbell bar
+            ctx.fillStyle = orangeGradient;
+            ctx.roundRect(140, 248, 232, 16, 8);
+            ctx.fill();
+
+            // Right barbell weight
+            ctx.fillStyle = orangeGradient;
+            ctx.roundRect(372, 220, 60, 72, 8);
+            ctx.fill();
+
+            // Central power circle
+            ctx.fillStyle = greenGradient;
+            ctx.beginPath();
+            ctx.arc(256, 256, 35, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Inner white circle
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath();
+            ctx.arc(256, 256, 25, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Lightning bolt
+            ctx.fillStyle = orangeGradient;
+            ctx.beginPath();
+            ctx.moveTo(246, 240);
+            ctx.lineTo(260, 240);
+            ctx.lineTo(252, 256);
+            ctx.lineTo(266, 256);
+            ctx.lineTo(246, 280);
+            ctx.lineTo(254, 264);
+            ctx.lineTo(240, 264);
+            ctx.closePath();
+            ctx.fill();
+
+            // Letter M
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 64px Arial Black, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('M', 256, 400);
+
+            // Progress bars
+            ctx.fillStyle = greenGradient;
+            ctx.roundRect(320, 160, 60, 6, 3);
+            ctx.fill();
+            ctx.roundRect(320, 175, 45, 6, 3);
+            ctx.fill();
+            ctx.roundRect(320, 190, 70, 6, 3);
+            ctx.fill();
+        }
+
+        // Add roundRect support for older browsers
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+                this.beginPath();
+                this.moveTo(x + radius, y);
+                this.lineTo(x + width - radius, y);
+                this.quadraticCurveTo(x + width, y, x + width, y + radius);
+                this.lineTo(x + width, y + height - radius);
+                this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+                this.lineTo(x + radius, y + height);
+                this.quadraticCurveTo(x, y + height, x, y + height - radius);
+                this.lineTo(x, y + radius);
+                this.quadraticCurveTo(x, y, x + radius, y);
+                this.closePath();
+            };
+        }
+
+        // Draw the icon
+        drawIcon();
+
+        // Download functions
+        function downloadPNG(size, filename) {
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = size;
+            tempCanvas.height = size;
+
+            tempCtx.drawImage(canvas, 0, 0, size, size);
+
+            tempCanvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+
+        document.getElementById('download192').onclick = () => downloadPNG(192, 'icon-192x192.png');
+        document.getElementById('download512').onclick = () => downloadPNG(512, 'icon-512x512.png');
+    </script>
+</body>
+</html>
