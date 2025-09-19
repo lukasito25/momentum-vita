@@ -30,12 +30,15 @@ A comprehensive fitness tracking application with multiple training programs, ad
 - **Cloud Backup** - Never lose your workout data
 - **Anonymous Support** - Works immediately without account creation
 
-### 📱 **Mobile-First Design**
+### 📱 **Progressive Web App (PWA)**
+- **Install on Home Screen** - Add to iOS/Android home screen like a native app
+- **iOS Safe Area Support** - Proper navigation in iOS standalone mode
+- **Custom App Icon** - Professional fitness-themed logo with barbell and lightning bolt
+- **Offline Functionality** - Full workout tracking without internet connection
+- **Push Notifications Ready** - Infrastructure for workout reminders (future feature)
 - **Touch-Optimized** - Perfect for gym usage on phones and tablets
 - **Responsive Layout** - Adapts beautifully to any screen size (320px to 4K)
 - **Modern UI** - Clean, professional interface inspired by top fitness apps
-- **Offline Mode** - Full functionality with local storage fallback
-- **Progressive Web App** - Install directly on mobile devices
 
 ## 🚀 Tech Stack
 
@@ -45,6 +48,8 @@ A comprehensive fitness tracking application with multiple training programs, ad
 - **Database**: Supabase (PostgreSQL with real-time subscriptions)
 - **Icons**: Lucide React (optimized SVG icons)
 - **Authentication**: Supabase Auth (anonymous/social login support)
+- **PWA**: Service Worker, Web App Manifest, installable app experience
+- **Icon Generation**: Node.js Canvas for dynamic PNG icon creation
 - **Deployment**: Vercel (Edge functions, automatic deployments)
 - **State Management**: React 18 hooks (useState, useReducer, useContext)
 - **Error Handling**: Comprehensive fallback strategies with offline support
@@ -185,16 +190,35 @@ npm run build
 - ✅ **Timer System** - Advanced workout timers with audio notifications
 
 ### 🚀 **Recent Major Improvements (2025):**
-1. **Deployment Fixes** - Resolved MIME type issues and build dependencies for Vercel
-2. **Mobile Interface** - Complete mobile layout overhaul for workout interface
+1. **Progressive Web App Implementation** - Full PWA functionality with home screen installation
+   - Service Worker: Advanced caching, offline support, background sync
+   - Web App Manifest: Complete app metadata, shortcuts, screenshots
+   - Install Prompts: Smart platform detection with guided installation
+   - iOS Compatibility: Proper PNG icons and apple-touch-icon declarations
+
+2. **iOS Mobile App Mode** - Native-like experience on iOS devices
+   - Safe Area Support: CSS env() variables for iOS notch/status bar
+   - Proper Navigation: Back button and headers work correctly in standalone mode
+   - Touch Targets: 44px minimum touch areas for iOS accessibility guidelines
+   - Status Bar Integration: No overlay issues, proper content positioning
+
+3. **Professional App Icon** - Custom fitness-themed logo
+   - Complete Icon Set: 9 PNG sizes (72x72 to 512x512) generated with Node.js Canvas
+   - Fitness Branding: Blue gradient background with orange barbell, lightning bolt, and "M" logo
+   - Cross-Platform: Works on iOS home screen, Android launcher, desktop bookmarks
+   - Fallback Support: SVG icon for modern browsers, PNG for mobile OS
+
+4. **Mobile Interface** - Complete mobile layout overhaul for workout interface
    - Weight controls: Centered layout with larger touch targets (12x12 buttons)
    - Action buttons: Vertical stacking on mobile, horizontal on desktop
    - Touch optimization: Added `touch-manipulation` for better mobile interactions
    - Responsive breakpoints: Proper layouts for mobile (320px), tablet (768px), desktop (1024px+)
-3. **Error Recovery** - Enhanced fallback strategies for offline usage
-4. **Performance** - Moved build tools to production dependencies for faster builds
-5. **User Experience** - Improved program switching with better error messages
-6. **Quality Assurance** - Comprehensive testing strategy for mobile responsiveness and core functionality
+
+5. **Deployment & Performance** - Production-ready optimizations
+   - Resolved MIME type issues and build dependencies for Vercel
+   - Enhanced fallback strategies for offline usage
+   - Moved build tools to production dependencies for faster builds
+   - Improved program switching with better error messages
 
 ### ⚡ **Cloud Features (when connected):**
 - Real-time progress synchronization across devices
@@ -202,9 +226,31 @@ npm run build
 - Cross-device workout history sharing
 - Advanced analytics and progress tracking
 
+## 📱 PWA Installation Guide
+
+### Install on iOS (iPhone/iPad):
+1. Open [momentum-vita.vercel.app](https://momentum-vita.vercel.app) in Safari
+2. Tap the Share button (square with arrow)
+3. Scroll down and tap "Add to Home Screen"
+4. Customize the name if desired, then tap "Add"
+5. The app icon will appear on your home screen with the custom Momentum Vita logo
+
+### Install on Android:
+1. Open [momentum-vita.vercel.app](https://momentum-vita.vercel.app) in Chrome
+2. Tap the three-dot menu and select "Add to Home screen"
+3. Or look for the automatic install banner and tap "Add"
+4. The app will install with the custom fitness icon
+
+### Install on Desktop:
+1. Open [momentum-vita.vercel.app](https://momentum-vita.vercel.app) in Chrome/Edge
+2. Click the install icon in the address bar (or use the Install button in the app)
+3. Click "Install" in the dialog
+4. The app will open in a dedicated window
+
 ## 🌐 Live Application
 
 🌍 **Production**: [momentum-vita.vercel.app](https://momentum-vita.vercel.app)
+📱 **PWA Installation**: Follow the guide above to install as a native app
 💻 **Development**: [localhost:5174](http://localhost:5174) (when running locally)
 
 ## 📝 License
