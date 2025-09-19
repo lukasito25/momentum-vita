@@ -3,6 +3,7 @@ import TrainingProgram from './TrainingProgram';
 import { ImageService } from './lib/imageService';
 import { AuthProvider } from './contexts/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 function App() {
   useEffect(() => {
@@ -14,6 +15,7 @@ function App() {
     <ErrorBoundary>
       <AuthProvider>
         <TrainingProgram />
+        <PWAInstallPrompt />
       </AuthProvider>
     </ErrorBoundary>
   )
