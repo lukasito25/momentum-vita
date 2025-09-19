@@ -831,8 +831,8 @@ const TrainingProgram = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         {/* Header with User Level Display */}
-        <div className="bg-white shadow-sm border-b sticky top-0 z-10">
-          <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className="bg-white shadow-sm border-b sticky pwa-sticky-header z-10">
+          <div className="max-w-6xl mx-auto px-4 py-4 pwa-header">
             <UserLevelDisplay />
           </div>
         </div>
@@ -886,8 +886,8 @@ const TrainingProgram = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Modern Enhanced Header */}
-      <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 shadow-xl sticky top-0 z-10 border-b border-slate-700/50">
-        <div className="p-3 sm:p-4">
+      <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 shadow-xl sticky pwa-sticky-header z-10 border-b border-slate-700/50">
+        <div className="p-3 sm:p-4 pwa-header">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <button

@@ -465,7 +465,7 @@ const GuidedWorkoutFlow: React.FC<GuidedWorkoutFlowProps> = ({
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900 to-purple-900 text-white p-4 sticky top-0 z-10">
+      <div className="bg-gradient-to-r from-blue-900 to-purple-900 text-white p-4 sticky pwa-sticky-header z-10 pwa-header">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Target className="w-6 h-6" />
