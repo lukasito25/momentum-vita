@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { DatabaseService } from '../lib/supabase';
 
 interface User {
   id: string;
@@ -35,8 +36,7 @@ export const useAuth = () => {
   if (!context) {
     // More detailed error for debugging
     console.error('useAuth called outside AuthProvider. Make sure AuthProvider wraps your component.');
-    // Return default context instead of throwing error
-    return defaultAuthContext;
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
@@ -56,7 +56,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const storedUser = localStorage.getItem('momentum_vita_user');
         if (storedUser) {
           const userData = JSON.parse(storedUser);
-          setUser(userData);
+          // Validate user data structure
+          if (userData && typeof userData === 'object' && userData.id && userData.email) {
+            setUser(userData);
+            DatabaseService.setUserId(userData.id);
+          } else {
+            console.warn('Invalid user data in localStorage, clearing...');
+            localStorage.removeItem('momentum_vita_user');
+          }
         }
       } catch (error) {
         console.error('Error loading stored user:', error);
@@ -74,17 +81,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
 
       // In a real app, this would make an API call to authenticate
-      // For now, we'll create a mock user object
+      // For now, we'll create a mock user object with premium status based on provider
       const newUser: User = {
-        id: `user_${Date.now()}`,
+        id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         ...userData,
         createdAt: new Date().toISOString(),
-        isPremium: false // Default to free tier
+        isPremium: userData.provider === 'google' || userData.provider === 'apple' ? true : false // Premium for social logins
       };
 
       // Store user data
       localStorage.setItem('momentum_vita_user', JSON.stringify(newUser));
       setUser(newUser);
+      DatabaseService.setUserId(newUser.id);
 
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -103,6 +111,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Clear stored data
       localStorage.removeItem('momentum_vita_user');
       setUser(null);
+      DatabaseService.setUserId('anonymous');
+
+      // Clear all user-specific localStorage data
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('program_progress_') || key.startsWith('enhanced_') || key.includes('workout') || key.includes('session'))) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
 
       // In a real app, you might also clear other user-specific data
       // or make an API call to invalidate the session
@@ -123,6 +142,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const updatedUser = { ...user, ...updates };
       localStorage.setItem('momentum_vita_user', JSON.stringify(updatedUser));
       setUser(updatedUser);
+      DatabaseService.setUserId(updatedUser.id);
 
       // In a real app, you'd make an API call here
       await new Promise(resolve => setTimeout(resolve, 300));

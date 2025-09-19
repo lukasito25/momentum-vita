@@ -175,6 +175,16 @@ export interface UserPreferences {
 export class DatabaseService {
   private static userId = 'anonymous'
 
+  // Set current user ID for database operations
+  static setUserId(userId: string) {
+    this.userId = userId || 'anonymous'
+  }
+
+  // Get current user ID
+  static getUserId(): string {
+    return this.userId
+  }
+
   // ===== LEGACY METHODS (maintained for backward compatibility) =====
 
   // Save completed session

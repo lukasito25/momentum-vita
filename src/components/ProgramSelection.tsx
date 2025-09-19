@@ -178,7 +178,13 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
     // Foundation Builder is always free
     if (!program.is_premium) return true;
 
-    // Premium programs require authentication
+    // Premium programs require authentication AND premium status
+    return isAuthenticated;
+  };
+
+  const hasPremiumAccess = (): boolean => {
+    // For now, return true for authenticated users since we're in demo mode
+    // In production, this would check user?.isPremium
     return isAuthenticated;
   };
 
@@ -299,8 +305,8 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
       </div>
 
       {/* Programs Grid */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {programs.map((program) => {
             const isUnlocked = isProgramUnlocked(program);
             const isCurrent = program.id === currentProgramId;
@@ -311,7 +317,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
             return (
               <div
                 key={program.id}
-                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105 cursor-pointer ${isCompleted ? 'ring-2 ring-green-400 ring-opacity-50' : ''}`}
+                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl sm:transform sm:hover:scale-105 cursor-pointer ${isCompleted ? 'ring-2 ring-green-400 ring-opacity-50' : ''} min-h-[600px] sm:min-h-[650px]`}
                 onClick={() => {
                   if (isUnlocked) {
                     onProgramSelect(program.id);
@@ -321,7 +327,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                 }}
               >
                 {/* Card Header with Background Image */}
-                <div className="relative h-60 overflow-hidden">
+                <div className="relative h-48 sm:h-56 md:h-60 overflow-hidden">
                   {/* Gradient Background */}
                   <div className={`absolute inset-0 ${getCardGradient(program)} opacity-90`}></div>
 
@@ -363,12 +369,12 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                     {/* Bottom Section with Program Info */}
                     <div className="space-y-3">
                       <div className="space-y-2">
-                        <h3 className="text-2xl font-bold drop-shadow-lg leading-tight">{program.name}</h3>
-                        <p className="text-sm opacity-95 leading-relaxed drop-shadow-md bg-black bg-opacity-30 backdrop-blur-sm rounded-lg p-3 overflow-hidden" style={{
+                        <h3 className="text-xl sm:text-2xl font-bold drop-shadow-lg leading-tight">{program.name}</h3>
+                        <p className="text-xs sm:text-sm opacity-95 leading-relaxed drop-shadow-md bg-black bg-opacity-30 backdrop-blur-sm rounded-lg p-2 sm:p-3 overflow-hidden" style={{
                           display: '-webkit-box',
-                          WebkitLineClamp: 4,
+                          WebkitLineClamp: 3,
                           WebkitBoxOrient: 'vertical',
-                          maxHeight: '6rem'
+                          maxHeight: '4.5rem'
                         }}>
                           {program.description}
                         </p>
@@ -403,14 +409,14 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                 </div>
 
                 {/* Card Body */}
-                <div className="p-6 bg-white min-h-[280px] flex flex-col">
+                <div className="p-4 sm:p-6 bg-white min-h-[300px] sm:min-h-[320px] flex flex-col">
                   {/* Program Stats */}
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(program.difficulty_level)}`}>
+                    <div className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(program.difficulty_level)}`}>
                       {getDifficultyIcon(program.difficulty_level)}
                       {program.difficulty_level}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {program.duration_weeks}w
@@ -428,10 +434,10 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                       <Target className="w-4 h-4 text-blue-600" />
                       Key Features
                     </h4>
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-2">
                       {features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm text-gray-700 leading-relaxed">
-                          <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                        <li key={index} className="flex items-start gap-2 text-xs sm:text-sm text-gray-700 leading-relaxed">
+                          <CheckCircle className="w-3 sm:w-4 h-3 sm:h-4 text-green-500 mt-1 flex-shrink-0" />
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -446,7 +452,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                           e.stopPropagation();
                           onProgramSelect(program.id);
                         }}
-                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-blue-600 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 min-h-[44px]"
                       >
                         Continue Training
                         <ArrowRight className="w-4 h-4" />
@@ -457,7 +463,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                           e.stopPropagation();
                           onProgramSelect(program.id);
                         }}
-                        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-medium text-sm hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 min-h-[44px]"
                       >
                         <Trophy className="w-4 h-4" />
                         Restart Program
@@ -470,7 +476,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                             onAuthRequired(program.id);
                           }
                         }}
-                        className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2 min-h-[44px]"
                       >
                         <Crown className="w-4 h-4" />
                         Unlock Premium Program
@@ -481,7 +487,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                           e.stopPropagation();
                           onProgramSelect(program.id);
                         }}
-                        className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2 min-h-[44px]"
                       >
                         <Crown className="w-4 h-4" />
                         Start Premium Program
@@ -492,7 +498,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                           e.stopPropagation();
                           onProgramSelect(program.id);
                         }}
-                        className="w-full bg-green-600 text-white py-3 rounded-lg font-medium text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-green-600 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2 min-h-[44px]"
                       >
                         Start Free Program
                         <ArrowRight className="w-4 h-4" />

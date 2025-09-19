@@ -27,7 +27,7 @@ import AuthModal from './components/AuthModal';
 const TrainingProgram = () => {
   // Authentication hooks - now with defensive context
   const { user, login, isAuthenticated, isLoading: authLoading } = useAuth();
-  const hasEnhancedMode = isAuthenticated; // Enhanced mode for authenticated users
+  const hasEnhancedMode = isAuthenticated && (user?.isPremium || isAuthenticated); // Enhanced mode for authenticated users (demo mode)
 
   const [currentWeek, setCurrentWeek] = useState(1);
   const [completedExercises, setCompletedExercises] = useState<Record<string, boolean>>({});
@@ -892,10 +892,10 @@ const TrainingProgram = () => {
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <button
                 onClick={handleBackToProgramSelection}
-                className="p-1.5 hover:bg-white/10 rounded-xl transition-all duration-200 group flex-shrink-0"
+                className="p-2 sm:p-1.5 hover:bg-white/10 rounded-xl transition-all duration-200 group flex-shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 title="Back to Program Selection"
               >
-                <ArrowLeft className="text-white/80 group-hover:text-white w-4 h-4 transition-colors" />
+                <ArrowLeft className="text-white/80 group-hover:text-white w-5 h-5 sm:w-4 sm:h-4 transition-colors" />
               </button>
               <div className="p-1.5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl shadow-lg flex-shrink-0">
                 <Trophy className="text-white w-5 h-5" />

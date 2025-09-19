@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import TrainingProgram from './TrainingProgram';
 import { ImageService } from './lib/imageService';
 import { AuthProvider } from './contexts/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   useEffect(() => {
@@ -10,9 +11,11 @@ function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <TrainingProgram />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <TrainingProgram />
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
 
