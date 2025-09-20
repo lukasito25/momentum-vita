@@ -18,6 +18,7 @@ import AdvancedExerciseCard from './components/AdvancedExerciseCard';
 import GuidedWorkoutFlow from './components/GuidedWorkoutFlow';
 import WorkoutModeToggle from './components/WorkoutModeToggle';
 import WorkoutBuilder from './components/WorkoutBuilder';
+import PremiumFeatureShowcase from './components/PremiumFeatureShowcase';
 import type { TimerExercise } from './components/WorkoutTimer';
 import { ExerciseSetTracking, SetData, WorkoutSessionData } from './types/SetTracking';
 import { CustomWorkout } from './types/ExerciseLibrary';
@@ -57,6 +58,10 @@ const TrainingProgram = () => {
   const [showWorkoutBuilder, setShowWorkoutBuilder] = useState(false);
   const [editingWorkout, setEditingWorkout] = useState<CustomWorkout | null>(null);
   const [customWorkouts, setCustomWorkouts] = useState<CustomWorkout[]>([]);
+
+  // Premium features demo state
+  const [showPremiumDemo, setShowPremiumDemo] = useState(false);
+  const [premiumDemoFeature, setPremiumDemoFeature] = useState<'analytics' | 'programs' | 'customization'>('customization');
 
   // Authentication modal state
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -1028,7 +1033,28 @@ const TrainingProgram = () => {
               )}
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={handleCreateWorkout}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl text-sm font-medium group"
+                title="Create custom workout"
+              >
+                <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                Create Workout
+              </button>
+              {!isAuthenticated && (
+                <button
+                  onClick={() => {
+                    setPremiumDemoFeature('customization');
+                    setShowPremiumDemo(true);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl text-sm font-medium group"
+                  title="Preview premium features"
+                >
+                  <Trophy className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  Premium
+                </button>
+              )}
               <button
                 onClick={() => setShowHistory(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl text-sm font-medium group"
@@ -1792,6 +1818,19 @@ const TrainingProgram = () => {
           onSave={handleSaveWorkout}
           onCancel={handleCancelWorkoutBuilder}
           isEditing={!!editingWorkout}
+        />
+      )}
+
+      {/* Premium Feature Demo */}
+      {showPremiumDemo && (
+        <PremiumFeatureShowcase
+          feature={premiumDemoFeature}
+          onUpgrade={() => {
+            setShowPremiumDemo(false);
+            setAuthTrigger('manual');
+            setShowAuthModal(true);
+          }}
+          onClose={() => setShowPremiumDemo(false)}
         />
       )}
     </div>
