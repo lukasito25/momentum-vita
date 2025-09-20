@@ -15,6 +15,7 @@ import {
   Award
 } from 'lucide-react';
 import { SetData, ExerciseSetTracking, SetTrackerProps, XP_REWARDS } from '../types/SetTracking';
+import { useHapticFeedback } from '../hooks/useHapticFeedback';
 
 const SetTracker: React.FC<SetTrackerProps> = ({
   exerciseSetTracking,
@@ -24,6 +25,8 @@ const SetTracker: React.FC<SetTrackerProps> = ({
   isActive,
   showAdvanced = true
 }) => {
+  // Haptic feedback hook
+  const { triggerHaptic } = useHapticFeedback();
   const [currentSetData, setCurrentSetData] = useState<SetData | null>(null);
   const [restTimer, setRestTimer] = useState(0);
   const [isResting, setIsResting] = useState(false);
@@ -52,7 +55,12 @@ const SetTracker: React.FC<SetTrackerProps> = ({
           if (prev <= 1) {
             setIsResting(false);
             playNotificationSound();
+            triggerHaptic('notification');
             return 0;
+          }
+          if (prev === 10) {
+            // Warning at 10 seconds remaining
+            triggerHaptic('warning');
           }
           return prev - 1;
         });
@@ -105,10 +113,12 @@ const SetTracker: React.FC<SetTrackerProps> = ({
     setIsSetActive(true);
     setSetTimer(0);
     setIsResting(false);
+    triggerHaptic('start');
   };
 
   const pauseSet = () => {
     setIsSetActive(false);
+    triggerHaptic('selection');
   };
 
   const completeSet = async () => {
@@ -129,6 +139,9 @@ const SetTracker: React.FC<SetTrackerProps> = ({
     // Call the completion handler
     onSetComplete(completedSetData);
 
+    // Trigger success haptic feedback
+    triggerHaptic('success');
+
     // Start rest timer if not the last set
     if (exerciseSetTracking.currentSet < exerciseSetTracking.totalSets) {
       setRestTimer(exerciseSetTracking.targetRestTime);
@@ -137,6 +150,7 @@ const SetTracker: React.FC<SetTrackerProps> = ({
     } else {
       // Exercise complete
       onExerciseComplete();
+      triggerHaptic('notification');
     }
 
     // Reset for next set
@@ -152,6 +166,7 @@ const SetTracker: React.FC<SetTrackerProps> = ({
 
     setCurrentSetData(updatedSetData);
     onSetUpdate(updatedSetData);
+    triggerHaptic('impact');
   };
 
   const resetSet = () => {
@@ -161,12 +176,29 @@ const SetTracker: React.FC<SetTrackerProps> = ({
     setRestTimer(0);
     setActualReps(null);
     setShowRPE(false);
+    triggerHaptic('selection');
   };
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const getRPEDescription = (rpe: number): string => {
+    const descriptions = {
+      1: 'Very Easy',
+      2: 'Easy',
+      3: 'Moderate',
+      4: 'Somewhat Hard',
+      5: 'Hard',
+      6: 'Harder',
+      7: 'Very Hard',
+      8: 'Very Very Hard',
+      9: 'Extremely Hard',
+      10: 'Maximum Effort'
+    };
+    return descriptions[rpe as keyof typeof descriptions] || '';
   };
 
   const getCompletedSetsCount = () => {
@@ -202,16 +234,16 @@ const SetTracker: React.FC<SetTrackerProps> = ({
       {/* Exercise Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-xl">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-bold text-lg">{exerciseSetTracking.exerciseName}</h3>
+          <h2 className="font-bold text-lg">{exerciseSetTracking.exerciseName}</h2>
           <div className="flex items-center gap-2 text-sm">
-            <span className="bg-white/20 px-2 py-1 rounded-full">
+            <span className="bg-white/20 px-2 py-1 rounded-full" aria-label={`Currently on set ${exerciseSetTracking.currentSet} of ${exerciseSetTracking.totalSets} total sets`}>
               Set {exerciseSetTracking.currentSet} of {exerciseSetTracking.totalSets}
             </span>
           </div>
         </div>
 
         {/* Progress bar */}
-        <div className="w-full bg-white/20 rounded-full h-2">
+        <div className="w-full bg-white/20 rounded-full h-2" role="progressbar" aria-valuenow={getCurrentSetProgress()} aria-valuemin={0} aria-valuemax={100} aria-label={`Exercise progress: ${getCurrentSetProgress()}% completed`}>
           <div
             className="bg-white h-2 rounded-full transition-all duration-500"
             style={{ width: `${getCurrentSetProgress()}%` }}
@@ -221,10 +253,20 @@ const SetTracker: React.FC<SetTrackerProps> = ({
 
       {/* Set Progress Indicators */}
       <div className="p-4 bg-gray-50 border-b">
-        <div className="flex gap-1">
+        <div className="flex gap-1" role="list" aria-label="Set completion indicators">
           {exerciseSetTracking.sets.map((set, index) => (
             <div
               key={set.id}
+              role="listitem"
+              aria-label={`Set ${index + 1}: ${
+                set.completed
+                  ? 'Completed'
+                  : index === exerciseSetTracking.currentSet - 1
+                    ? isSetActive
+                      ? 'Currently active'
+                      : 'Current set, not started'
+                    : 'Not started'
+              }`}
               className={`flex-1 h-3 rounded-full transition-all duration-300 ${
                 set.completed
                   ? 'bg-green-500'
@@ -290,24 +332,28 @@ const SetTracker: React.FC<SetTrackerProps> = ({
       {/* Weight Controls */}
       <div className="px-4 py-3 bg-gray-50 border-y">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">Weight:</span>
-          <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-gray-700" id="weight-label">Weight:</label>
+          <div className="flex items-center gap-3">
             <button
               onClick={() => updateWeight(-2.5)}
-              className="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors"
+              className="w-12 h-12 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors touch-manipulation"
               disabled={isResting}
+              aria-label={`Decrease weight by 2.5kg, current weight ${currentSetData.weight}kg`}
+              aria-describedby="weight-label"
             >
-              <Minus className="w-4 h-4" />
+              <Minus className="w-6 h-6" />
             </button>
-            <span className="w-20 text-center font-mono text-lg font-bold bg-white py-2 px-1 rounded-lg border">
+            <span className="w-24 text-center font-mono text-lg font-bold bg-white py-3 px-2 rounded-lg border" aria-live="polite" aria-label={`Current weight: ${currentSetData.weight} kilograms`}>
               {currentSetData.weight}kg
             </span>
             <button
               onClick={() => updateWeight(2.5)}
-              className="w-8 h-8 bg-green-500 text-white rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors"
+              className="w-12 h-12 bg-green-500 text-white rounded-lg flex items-center justify-center hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors touch-manipulation"
               disabled={isResting}
+              aria-label={`Increase weight by 2.5kg, current weight ${currentSetData.weight}kg`}
+              aria-describedby="weight-label"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-6 h-6" />
             </button>
           </div>
         </div>
@@ -319,25 +365,31 @@ const SetTracker: React.FC<SetTrackerProps> = ({
           <div className="grid grid-cols-2 gap-4">
             {/* Actual Reps Input */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="actual-reps-input">
                 Actual Reps
               </label>
               <input
+                id="actual-reps-input"
                 type="number"
                 value={actualReps || ''}
                 onChange={(e) => setActualReps(e.target.value ? parseInt(e.target.value) : null)}
-                placeholder={currentSetData.targetReps}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder={currentSetData.targetReps?.toString()}
+                className="w-full px-3 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-manipulation"
                 disabled={isResting}
+                aria-describedby="actual-reps-help"
               />
+              <div id="actual-reps-help" className="sr-only">
+                Enter the number of repetitions you actually completed for this set. Target is {currentSetData.targetReps} reps.
+              </div>
             </div>
 
             {/* RPE Input */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-700 mb-1" htmlFor="rpe-select">
                 RPE (1-10)
               </label>
               <select
+                id="rpe-select"
                 value={currentSetData.rpe || ''}
                 onChange={(e) => {
                   const rpe = e.target.value ? parseInt(e.target.value) : undefined;
@@ -345,14 +397,18 @@ const SetTracker: React.FC<SetTrackerProps> = ({
                   setCurrentSetData(updatedSetData);
                   onSetUpdate(updatedSetData);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-manipulation"
                 disabled={isResting}
+                aria-describedby="rpe-help"
               >
-                <option value="">-</option>
+                <option value="">Select RPE</option>
                 {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
-                  <option key={num} value={num}>{num}</option>
+                  <option key={num} value={num}>{num} - {getRPEDescription(num)}</option>
                 ))}
               </select>
+              <div id="rpe-help" className="sr-only">
+                Rate of Perceived Exertion: 1 is very easy, 10 is maximum effort
+              </div>
             </div>
           </div>
         </div>
@@ -364,44 +420,54 @@ const SetTracker: React.FC<SetTrackerProps> = ({
           {isResting ? (
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setIsResting(false)}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium"
+                onClick={() => {
+                  setIsResting(false);
+                  triggerHaptic('selection');
+                }}
+                className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors text-sm font-medium touch-manipulation min-h-[48px]"
+                aria-label="Skip the remaining rest time and continue to next set"
               >
                 Skip Rest
               </button>
               <button
-                onClick={() => setRestTimer(prev => prev + 30)}
-                className="px-3 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-sm"
+                onClick={() => {
+                  setRestTimer(prev => prev + 30);
+                  triggerHaptic('selection');
+                }}
+                className="px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors text-sm touch-manipulation min-h-[48px]"
+                aria-label="Add 30 seconds to rest timer"
               >
                 +30s
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {!isSetActive ? (
                 <button
                   onClick={startSet}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+                  className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium touch-manipulation min-h-[48px]"
+                  aria-label="Start the current set timer"
                 >
-                  <Play className="w-4 h-4" />
+                  <Play className="w-5 h-5" />
                   Start Set
                 </button>
               ) : (
                 <button
                   onClick={pauseSet}
-                  className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
+                  className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors font-medium touch-manipulation min-h-[48px]"
+                  aria-label="Pause the current set timer"
                 >
-                  <Pause className="w-4 h-4" />
+                  <Pause className="w-5 h-5" />
                   Pause
                 </button>
               )}
 
               <button
                 onClick={resetSet}
-                className="p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                title="Reset set"
+                className="p-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors touch-manipulation min-h-[48px] min-w-[48px]"
+                aria-label="Reset the current set timer and data"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-5 h-5" />
               </button>
             </div>
           )}
@@ -412,11 +478,12 @@ const SetTracker: React.FC<SetTrackerProps> = ({
           <button
             onClick={completeSet}
             disabled={!isSetActive && setTimer === 0}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-600 focus:ring-offset-2 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[56px]"
+            aria-label={`Complete current set and earn ${XP_REWARDS.SET_COMPLETION} experience points`}
           >
-            <CheckCircle2 className="w-4 h-4" />
+            <CheckCircle2 className="w-5 h-5" />
             Complete Set
-            <span className="text-sm">+{XP_REWARDS.SET_COMPLETION} XP</span>
+            <span className="text-sm" aria-hidden="true">+{XP_REWARDS.SET_COMPLETION} XP</span>
           </button>
         )}
 
@@ -425,13 +492,15 @@ const SetTracker: React.FC<SetTrackerProps> = ({
          exerciseSetTracking.sets[exerciseSetTracking.currentSet - 1]?.completed && (
           <button
             onClick={onExerciseComplete}
-            className="w-full flex items-center justify-center gap-2 py-3 mt-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+            className="w-full flex items-center justify-center gap-2 py-4 mt-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-600 focus:ring-offset-2 transition-colors font-medium touch-manipulation min-h-[56px]"
+            aria-label={`Finish exercise and earn ${XP_REWARDS.EXERCISE_COMPLETION} experience points`}
           >
-            <Award className="w-4 h-4" />
+            <Award className="w-5 h-5" />
             Finish Exercise
-            <span className="text-sm">+{XP_REWARDS.EXERCISE_COMPLETION} XP</span>
+            <span className="text-sm" aria-hidden="true">+{XP_REWARDS.EXERCISE_COMPLETION} XP</span>
           </button>
         )}
+
       </div>
 
       {/* XP Indicators */}

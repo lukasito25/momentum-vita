@@ -17,8 +17,10 @@ import useEnhancedWorkoutTracking from './hooks/useEnhancedWorkoutTracking';
 import AdvancedExerciseCard from './components/AdvancedExerciseCard';
 import GuidedWorkoutFlow from './components/GuidedWorkoutFlow';
 import WorkoutModeToggle from './components/WorkoutModeToggle';
+import WorkoutBuilder from './components/WorkoutBuilder';
 import type { TimerExercise } from './components/WorkoutTimer';
 import { ExerciseSetTracking, SetData, WorkoutSessionData } from './types/SetTracking';
+import { CustomWorkout } from './types/ExerciseLibrary';
 import { beastModeEliteWorkouts } from './data/beast-mode-elite';
 import { powerSurgeProWorkouts } from './data/power-surge-pro';
 import { useAuth } from './contexts/AuthContext';
@@ -50,6 +52,11 @@ const TrainingProgram = () => {
   const [showGuidedWorkout, setShowGuidedWorkout] = useState(false);
   const [guidedWorkoutDay, setGuidedWorkoutDay] = useState<string>('');
   const [expandedExercises, setExpandedExercises] = useState<Record<string, boolean>>({});
+
+  // Custom workout builder state
+  const [showWorkoutBuilder, setShowWorkoutBuilder] = useState(false);
+  const [editingWorkout, setEditingWorkout] = useState<CustomWorkout | null>(null);
+  const [customWorkouts, setCustomWorkouts] = useState<CustomWorkout[]>([]);
 
   // Authentication modal state
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -742,6 +749,46 @@ const TrainingProgram = () => {
       console.error('Error saving guided workout:', error);
       alert('❌ Failed to save guided workout session.');
     }
+  };
+
+  // Custom workout handlers
+  const handleCreateWorkout = () => {
+    setEditingWorkout(null);
+    setShowWorkoutBuilder(true);
+  };
+
+  const handleEditWorkout = (workout: CustomWorkout) => {
+    setEditingWorkout(workout);
+    setShowWorkoutBuilder(true);
+  };
+
+  const handleSaveWorkout = async (workout: CustomWorkout) => {
+    try {
+      // Save to local state
+      setCustomWorkouts(prev => {
+        const existingIndex = prev.findIndex(w => w.id === workout.id);
+        if (existingIndex >= 0) {
+          return prev.map((w, i) => i === existingIndex ? workout : w);
+        }
+        return [...prev, workout];
+      });
+
+      // Save to database (in a real app)
+      // await DatabaseService.saveCustomWorkout(workout);
+
+      setShowWorkoutBuilder(false);
+      setEditingWorkout(null);
+
+      // Award XP for creating custom workout
+      await gamification.awardXP(25, 'custom_workout_creation');
+    } catch (error) {
+      console.error('Error saving custom workout:', error);
+    }
+  };
+
+  const handleCancelWorkoutBuilder = () => {
+    setShowWorkoutBuilder(false);
+    setEditingWorkout(null);
   };
 
   // Launch workout timer for exercise
@@ -1737,6 +1784,16 @@ const TrainingProgram = () => {
         onAuth={handleAuth}
         trigger={authTrigger}
       />
+
+      {/* Custom Workout Builder */}
+      {showWorkoutBuilder && (
+        <WorkoutBuilder
+          initialWorkout={editingWorkout || undefined}
+          onSave={handleSaveWorkout}
+          onCancel={handleCancelWorkoutBuilder}
+          isEditing={!!editingWorkout}
+        />
+      )}
     </div>
   );
 };

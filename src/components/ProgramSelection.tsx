@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Star, Lock, Crown, Trophy, TrendingUp, Clock, Users, Target, CheckCircle, ArrowRight } from "lucide-react";
 import { DatabaseService, TrainingProgram, UserProgress } from '../lib/supabase';
 import InstallButton from './InstallButton';
+import { useHapticFeedback } from '../hooks/useHapticFeedback';
 
 interface ProgramSelectionProps {
   onProgramSelect: (programId: string) => void;
@@ -11,6 +12,7 @@ interface ProgramSelectionProps {
 }
 
 const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated = false, onAuthRequired }: ProgramSelectionProps) => {
+  const { ui } = useHapticFeedback();
   const [programs, setPrograms] = useState<TrainingProgram[]>([]);
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
   const [loading, setLoading] = useState(true);
@@ -310,8 +312,8 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
       </div>
 
       {/* Programs Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8" role="list" aria-label="Available training programs">
           {programs.map((program) => {
             const isUnlocked = isProgramUnlocked(program);
             const isCurrent = program.id === currentProgramId;
@@ -322,14 +324,38 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
             return (
               <div
                 key={program.id}
-                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl sm:transform sm:hover:scale-105 cursor-pointer ${isCompleted ? 'ring-2 ring-green-400 ring-opacity-50' : ''} min-h-[600px] sm:min-h-[650px]`}
+                role="button"
+                tabIndex={0}
+                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl sm:transform sm:hover:scale-105 cursor-pointer focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:outline-none ${isCompleted ? 'ring-2 ring-green-400 ring-opacity-50' : ''} min-h-[600px] sm:min-h-[650px]`}
                 onClick={() => {
+                  ui.buttonTap();
                   if (isUnlocked) {
                     onProgramSelect(program.id);
                   } else if (program.is_premium && !isAuthenticated && onAuthRequired) {
                     onAuthRequired(program.id);
                   }
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    ui.buttonTap();
+                    if (isUnlocked) {
+                      onProgramSelect(program.id);
+                    } else if (program.is_premium && !isAuthenticated && onAuthRequired) {
+                      onAuthRequired(program.id);
+                    }
+                  }
+                }}
+                aria-label={`${program.name} - ${program.difficulty_level} level, ${program.duration_weeks} weeks. ${program.description}. ${
+                  isCurrent
+                    ? 'Currently selected program'
+                    : isCompleted
+                      ? 'Completed program'
+                      : program.is_premium && !isAuthenticated
+                        ? 'Premium program - requires authentication'
+                        : 'Available program'
+                }`}
+                aria-pressed={isCurrent}
               >
                 {/* Card Header with Background Image */}
                 <div className="relative h-48 sm:h-56 md:h-60 overflow-hidden">
@@ -374,7 +400,7 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                     {/* Bottom Section with Program Info */}
                     <div className="space-y-3">
                       <div className="space-y-2">
-                        <h3 className="text-xl sm:text-2xl font-bold drop-shadow-lg leading-tight">{program.name}</h3>
+                        <h2 className="text-xl sm:text-2xl font-bold drop-shadow-lg leading-tight">{program.name}</h2>
                         <p className="text-xs sm:text-sm opacity-95 leading-relaxed drop-shadow-md bg-black bg-opacity-30 backdrop-blur-sm rounded-lg p-2 sm:p-3 overflow-hidden" style={{
                           display: '-webkit-box',
                           WebkitLineClamp: 3,
@@ -435,14 +461,14 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
 
                   {/* Features */}
                   <div className="space-y-3 flex-1">
-                    <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-                      <Target className="w-4 h-4 text-blue-600" />
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                      <Target className="w-4 h-4 text-blue-600" aria-hidden="true" />
                       Key Features
-                    </h4>
-                    <ul className="space-y-2">
+                    </h3>
+                    <ul className="space-y-2" role="list" aria-label={`Key features of ${program.name} program`}>
                       {features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2 text-xs sm:text-sm text-gray-700 leading-relaxed">
-                          <CheckCircle className="w-3 sm:w-4 h-3 sm:h-4 text-green-500 mt-1 flex-shrink-0" />
+                        <li key={index} className="flex items-start gap-2 text-xs sm:text-sm text-gray-700 leading-relaxed" role="listitem">
+                          <CheckCircle className="w-3 sm:w-4 h-3 sm:h-4 text-green-500 mt-1 flex-shrink-0" aria-hidden="true" />
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -455,22 +481,26 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
+                          ui.buttonTap();
                           onProgramSelect(program.id);
                         }}
-                        className="w-full bg-blue-600 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 min-h-[44px]"
+                        className="w-full bg-blue-600 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors flex items-center justify-center gap-2 min-h-[48px] touch-manipulation"
+                        aria-label={`Continue training with ${program.name} program`}
                       >
                         Continue Training
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-4 h-4" aria-hidden="true" />
                       </button>
                     ) : isCompleted ? (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
+                          ui.buttonTap();
                           onProgramSelect(program.id);
                         }}
-                        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 min-h-[44px]"
+                        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 sm:py-4 rounded-lg font-medium text-sm hover:from-green-700 hover:to-emerald-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all flex items-center justify-center gap-2 min-h-[48px] touch-manipulation"
+                        aria-label={`Restart completed ${program.name} program`}
                       >
-                        <Trophy className="w-4 h-4" />
+                        <Trophy className="w-4 h-4" aria-hidden="true" />
                         Restart Program
                       </button>
                     ) : program.is_premium && !isAuthenticated ? (
@@ -529,17 +559,17 @@ const ProgramSelection = ({ onProgramSelect, currentProgramId, isAuthenticated =
         </div>
 
         {/* Help Text */}
-        <div className="mt-12 text-center">
+        <section className="mt-12 text-center" aria-labelledby="program-help-heading">
           <div className="bg-white rounded-xl shadow-sm border p-6 max-w-2xl mx-auto">
-            <h3 className="font-semibold text-gray-900 mb-3">Need Help Choosing?</h3>
+            <h2 id="program-help-heading" className="font-semibold text-gray-900 mb-3">Need Help Choosing?</h2>
             <div className="text-sm text-gray-600 space-y-2">
               <p><strong>Foundation Builder:</strong> Perfect for beginners or anyone returning to fitness. Focus on form and fundamentals.</p>
               <p><strong>Power Surge Pro:</strong> For experienced lifters ready to take their strength to the next level with advanced techniques.</p>
               <p><strong>Beast Mode Elite:</strong> Elite-level programming for serious athletes pursuing maximum performance gains.</p>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 };
