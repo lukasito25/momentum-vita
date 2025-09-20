@@ -66,6 +66,11 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
     }
   }, []);
 
+  // Calculate progress
+  const totalExercises = todaysWorkout.length;
+  const completedCount = completedExercises.length;
+  const progressPercentage = totalExercises > 0 ? Math.round((completedCount / totalExercises) * 100) : 0;
+
   // Update streak and today's completion status
   useEffect(() => {
     const today = new Date().toDateString();
@@ -79,11 +84,6 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
       localStorage.setItem('last_workout_date', today);
     }
   }, [completedCount, totalExercises, currentStreak, todayCompleted]);
-
-  // Calculate progress
-  const totalExercises = todaysWorkout.length;
-  const completedCount = completedExercises.length;
-  const progressPercentage = totalExercises > 0 ? Math.round((completedCount / totalExercises) * 100) : 0;
 
   const handleExerciseComplete = (exerciseId: string) => {
     if (!completedExercises.includes(exerciseId)) {
