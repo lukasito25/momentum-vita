@@ -299,15 +299,15 @@ const WorkoutLibrary: React.FC<WorkoutLibraryProps> = ({
       ) : (
         <div className="space-y-4">
           {filteredPrograms.map((program) => {
-          const isActive = program.id === currentProgramId;
-          const isLocked = program.isPremium && !isAuthenticated;
+            const isActive = program.id === currentProgramId;
+            const isLocked = program.isPremium && !isAuthenticated;
 
-          return (
-            <div
-              key={program.id}
-              className={`card relative ${
-                isActive ? 'border-indigo-500 bg-indigo-50' : ''
-              } ${isLocked ? 'opacity-75' : ''}`}
+            return (
+              <div
+                key={program.id}
+                className={`card relative ${
+                  isActive ? 'border-indigo-500 bg-indigo-50' : ''
+                } ${isLocked ? 'opacity-75' : ''}`}
             >
               {/* Premium Badge */}
               {program.isPremium && (
@@ -431,7 +431,7 @@ const WorkoutLibrary: React.FC<WorkoutLibraryProps> = ({
                 </button>
               </div>
             </div>
-          );
+            );
           })}
         </div>
       )}
