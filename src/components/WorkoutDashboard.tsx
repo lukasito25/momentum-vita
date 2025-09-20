@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, CheckCircle2, Clock, Target, Flame, Timer, Plus, Dumbbell } from 'lucide-react';
+import { Play, CheckCircle2, Clock, Target, Flame, Timer, Plus, Dumbbell, Sparkles, RotateCcw } from 'lucide-react';
 
 interface Exercise {
   id: string;
@@ -18,6 +18,8 @@ interface WorkoutDashboardProps {
   onStartExercise?: (exerciseId: string) => void;
   isAuthenticated?: boolean;
   onUpgrade?: () => void;
+  onShowProgramSelection?: () => void;
+  onCreateCustomWorkout?: () => void;
 }
 
 const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
@@ -28,6 +30,8 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
   onStartExercise,
   isAuthenticated = false,
   onUpgrade,
+  onShowProgramSelection,
+  onCreateCustomWorkout,
 }) => {
   const [completedExercises, setCompletedExercises] = useState<string[]>([]);
   const [currentStreak, setCurrentStreak] = useState(3);
@@ -219,22 +223,66 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
         </div>
       )}
 
-      {/* Premium Features Teaser */}
-      {!isAuthenticated && (
+      {/* Quick Actions */}
+      <div className="space-y-3">
+        {/* Program Selection */}
+        <div className="card">
+          <div className="card-body">
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <h3 className="font-semibold text-gray-900">Your Program</h3>
+                <p className="text-sm text-gray-600">{currentProgram}</p>
+              </div>
+              <button
+                onClick={onShowProgramSelection}
+                className="btn btn-secondary touch-feedback"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Change
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Custom Workout Generator */}
         <div className="card bg-gradient-to-br from-indigo-50 to-cyan-50 border-indigo-200">
+          <div className="card-body">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-indigo-900">AI Workout Generator</h3>
+                <p className="text-sm text-indigo-700">Create personalized workouts instantly</p>
+              </div>
+            </div>
+            <button
+              onClick={onCreateCustomWorkout}
+              className="w-full btn btn-primary touch-feedback"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              {isAuthenticated ? 'Create Custom Workout' : 'Try Premium Feature'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Premium Features Teaser - Only show if not authenticated and no custom workout button clicked */}
+      {!isAuthenticated && (
+        <div className="card bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
           <div className="card-body text-center">
-            <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-3">
+            <div className="w-12 h-12 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <Plus className="w-6 h-6 text-white" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Unlock Premium</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">More Programs Available</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Get AI-powered workouts, custom programs, and detailed analytics
+              Access Beast Mode Elite, Power Surge Pro, and unlimited custom workouts
             </p>
             <button
               onClick={onUpgrade}
               className="btn btn-primary touch-feedback"
             >
-              Upgrade Now
+              Upgrade to Premium
             </button>
           </div>
         </div>

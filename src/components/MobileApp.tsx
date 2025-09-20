@@ -4,6 +4,10 @@ import WorkoutDashboard from './WorkoutDashboard';
 import ExerciseFlow from './ExerciseFlow';
 import OnboardingFlow from './OnboardingFlow';
 import ProgressView from './ProgressView';
+import CustomWorkoutGenerator from './CustomWorkoutGenerator';
+import ProgramSelectionModal from './ProgramSelectionModal';
+import WorkoutLibrary from './WorkoutLibrary';
+import { workoutPrograms, getTodaysWorkout, getWorkoutProgram } from '../data/workout-programs';
 import { User, BarChart3, Settings, Crown } from 'lucide-react';
 
 // Sample workout data
@@ -47,6 +51,10 @@ const MobileApp: React.FC = () => {
   const [showWorkoutFlow, setShowWorkoutFlow] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingTrigger, setOnboardingTrigger] = useState<'premium' | 'custom-workout' | 'analytics'>('premium');
+  const [showCustomWorkoutGenerator, setShowCustomWorkoutGenerator] = useState(false);
+  const [showProgramSelection, setShowProgramSelection] = useState(false);
+  const [currentProgramId, setCurrentProgramId] = useState('foundation-builder');
+  const [currentWorkout, setCurrentWorkout] = useState(sampleWorkout);
 
   // Load user from localStorage on mount
   useEffect(() => {
@@ -58,7 +66,25 @@ const MobileApp: React.FC = () => {
         console.error('Error parsing saved user:', error);
       }
     }
+
+    // Load saved program
+    const savedProgram = localStorage.getItem('current_program_id');
+    if (savedProgram) {
+      setCurrentProgramId(savedProgram);
+    }
   }, []);
+
+  // Update current workout when program changes
+  useEffect(() => {
+    const todaysWorkout = getTodaysWorkout(currentProgramId);
+    if (todaysWorkout) {
+      const exercisesWithIds = todaysWorkout.exercises.map((exercise, index) => ({
+        id: `${todaysWorkout.dayName}-${index}`,
+        ...exercise
+      }));
+      setCurrentWorkout(exercisesWithIds);
+    }
+  }, [currentProgramId]);
 
   const handleStartWorkout = () => {
     setShowWorkoutFlow(true);
@@ -100,37 +126,79 @@ const MobileApp: React.FC = () => {
     setShowOnboarding(false);
   };
 
+  const handleShowProgramSelection = () => {
+    setShowProgramSelection(true);
+  };
+
+  const handleSelectProgram = (programId: string) => {
+    const program = getWorkoutProgram(programId);
+    if (program?.isPremium && !user) {
+      setOnboardingTrigger('premium');
+      setShowOnboarding(true);
+      setShowProgramSelection(false);
+      return;
+    }
+
+    setCurrentProgramId(programId);
+    localStorage.setItem('current_program_id', programId);
+    setShowProgramSelection(false);
+  };
+
+  const handleCreateCustomWorkout = () => {
+    if (!user) {
+      setOnboardingTrigger('custom-workout');
+      setShowOnboarding(true);
+      return;
+    }
+    setShowCustomWorkoutGenerator(true);
+  };
+
+  const handleCustomWorkoutComplete = (workout: any) => {
+    // Convert generated workout to our exercise format
+    const customExercises = workout.exercises.map((exercise: any) => ({
+      id: exercise.id,
+      name: exercise.name,
+      sets: exercise.sets,
+      rest: exercise.rest,
+      notes: exercise.notes
+    }));
+
+    setCurrentWorkout(customExercises);
+    setShowCustomWorkoutGenerator(false);
+    setShowWorkoutFlow(true);
+  };
+
+  const handleCustomWorkoutCancel = () => {
+    setShowCustomWorkoutGenerator(false);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'home':
+        const currentProgram = getWorkoutProgram(currentProgramId);
         return (
           <WorkoutDashboard
-            currentProgram="Foundation Builder"
+            currentProgram={currentProgram?.name || "Foundation Builder"}
             currentWeek={1}
-            todaysWorkout={sampleWorkout}
+            todaysWorkout={currentWorkout}
             onStartWorkout={handleStartWorkout}
             isAuthenticated={!!user}
             onUpgrade={() => handleUpgrade('premium')}
+            onShowProgramSelection={handleShowProgramSelection}
+            onCreateCustomWorkout={handleCreateCustomWorkout}
           />
         );
 
       case 'workout':
         return (
-          <div className="page-content">
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <User className="w-8 h-8 text-indigo-600" />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Workout Library</h2>
-              <p className="text-gray-600 mb-6">Browse and start your workouts</p>
-              <button
-                onClick={handleStartWorkout}
-                className="btn btn-primary btn-lg touch-feedback"
-              >
-                Start Today's Workout
-              </button>
-            </div>
-          </div>
+          <WorkoutLibrary
+            onSelectProgram={handleSelectProgram}
+            onStartCustomWorkout={handleCreateCustomWorkout}
+            onStartTodaysWorkout={handleStartWorkout}
+            currentProgramId={currentProgramId}
+            isAuthenticated={!!user}
+            onUpgrade={() => handleUpgrade('premium')}
+          />
         );
 
       case 'progress':
@@ -238,7 +306,7 @@ const MobileApp: React.FC = () => {
   if (showWorkoutFlow) {
     return (
       <ExerciseFlow
-        exercises={sampleWorkout}
+        exercises={currentWorkout}
         onComplete={handleCompleteWorkout}
         onExit={handleExitWorkout}
       />
@@ -287,6 +355,25 @@ const MobileApp: React.FC = () => {
           trigger={onboardingTrigger}
           onComplete={handleOnboardingComplete}
           onSkip={handleOnboardingSkip}
+        />
+      )}
+
+      {/* Program Selection Modal */}
+      {showProgramSelection && (
+        <ProgramSelectionModal
+          onSelectProgram={handleSelectProgram}
+          onClose={() => setShowProgramSelection(false)}
+          onUpgrade={() => handleUpgrade('premium')}
+          isAuthenticated={!!user}
+          currentProgramId={currentProgramId}
+        />
+      )}
+
+      {/* Custom Workout Generator */}
+      {showCustomWorkoutGenerator && (
+        <CustomWorkoutGenerator
+          onComplete={handleCustomWorkoutComplete}
+          onClose={handleCustomWorkoutCancel}
         />
       )}
     </div>
