@@ -7,6 +7,7 @@ import ProgressView from './ProgressView';
 import CustomWorkoutGenerator from './CustomWorkoutGenerator';
 import ProgramSelectionModal from './ProgramSelectionModal';
 import WorkoutLibrary from './WorkoutLibrary';
+import WorkoutPreview from './WorkoutPreview';
 import { workoutPrograms, getTodaysWorkout, getWorkoutProgram } from '../data/workout-programs';
 import { User, BarChart3, Settings, Crown } from 'lucide-react';
 
@@ -53,6 +54,7 @@ const MobileApp: React.FC = () => {
   const [onboardingTrigger, setOnboardingTrigger] = useState<'premium' | 'custom-workout' | 'analytics'>('premium');
   const [showCustomWorkoutGenerator, setShowCustomWorkoutGenerator] = useState(false);
   const [showProgramSelection, setShowProgramSelection] = useState(false);
+  const [showWorkoutPreview, setShowWorkoutPreview] = useState(false);
   const [currentProgramId, setCurrentProgramId] = useState('foundation-builder');
   const [currentWorkout, setCurrentWorkout] = useState(sampleWorkout);
 
@@ -172,6 +174,14 @@ const MobileApp: React.FC = () => {
     setShowCustomWorkoutGenerator(false);
   };
 
+  const handleShowWorkoutPreview = () => {
+    setShowWorkoutPreview(true);
+  };
+
+  const handleWorkoutPreviewClose = () => {
+    setShowWorkoutPreview(false);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'home':
@@ -186,6 +196,8 @@ const MobileApp: React.FC = () => {
             onUpgrade={() => handleUpgrade('premium')}
             onShowProgramSelection={handleShowProgramSelection}
             onCreateCustomWorkout={handleCreateCustomWorkout}
+            onShowWorkoutPreview={handleShowWorkoutPreview}
+            currentProgramId={currentProgramId}
           />
         );
 
@@ -374,6 +386,18 @@ const MobileApp: React.FC = () => {
         <CustomWorkoutGenerator
           onComplete={handleCustomWorkoutComplete}
           onClose={handleCustomWorkoutCancel}
+        />
+      )}
+
+      {/* Workout Preview */}
+      {showWorkoutPreview && (
+        <WorkoutPreview
+          programId={currentProgramId}
+          onClose={handleWorkoutPreviewClose}
+          onStartWorkout={() => {
+            handleWorkoutPreviewClose();
+            handleStartWorkout();
+          }}
         />
       )}
     </div>

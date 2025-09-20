@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Play, CheckCircle2, Clock, Target, Flame, Timer, Plus, Dumbbell, Sparkles, RotateCcw } from 'lucide-react';
+import { Play, CheckCircle2, Clock, Target, Flame, Timer, Plus, Dumbbell, Sparkles, RotateCcw, Eye, Calendar } from 'lucide-react';
+import EnhancedExerciseCard from './EnhancedExerciseCard';
 
 interface Exercise {
   id: string;
@@ -20,6 +21,8 @@ interface WorkoutDashboardProps {
   onUpgrade?: () => void;
   onShowProgramSelection?: () => void;
   onCreateCustomWorkout?: () => void;
+  onShowWorkoutPreview?: () => void;
+  currentProgramId?: string;
 }
 
 const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
@@ -32,6 +35,8 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
   onUpgrade,
   onShowProgramSelection,
   onCreateCustomWorkout,
+  onShowWorkoutPreview,
+  currentProgramId = 'foundation-builder',
 }) => {
   const [completedExercises, setCompletedExercises] = useState<string[]>([]);
   const [currentStreak, setCurrentStreak] = useState(3);
@@ -131,37 +136,47 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
                   <Dumbbell className="w-8 h-8 text-gray-400" />
                 </div>
                 <p className="text-gray-600 mb-4">No workout scheduled for today</p>
-                <button className="btn btn-primary btn-lg touch-feedback">
+                <button
+                  onClick={onShowProgramSelection}
+                  className="btn btn-primary btn-lg touch-feedback"
+                >
                   Choose Workout
                 </button>
               </div>
             ) : (
               <>
-                {completedCount === 0 ? (
+                {/* Action Buttons */}
+                <div className="flex gap-3">
                   <button
-                    onClick={onStartWorkout}
-                    className="w-full btn btn-primary btn-lg touch-feedback"
+                    onClick={onShowWorkoutPreview}
+                    className="flex-1 btn btn-secondary touch-feedback"
                   >
-                    <Play className="w-5 h-5 mr-2" />
-                    Start Workout
+                    <Eye className="w-4 h-4 mr-2" />
+                    Preview
                   </button>
-                ) : completedCount === totalExercises ? (
-                  <div className="text-center py-4">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <CheckCircle2 className="w-8 h-8 text-green-600" />
+                  {completedCount === 0 ? (
+                    <button
+                      onClick={onStartWorkout}
+                      className="flex-1 btn btn-primary touch-feedback"
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      Start
+                    </button>
+                  ) : completedCount === totalExercises ? (
+                    <div className="flex-1 text-center py-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-600 mx-auto mb-1" />
+                      <p className="text-xs text-green-600 font-medium">Complete!</p>
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Workout Complete!</h3>
-                    <p className="text-sm text-gray-600">Great job finishing today's session</p>
-                  </div>
-                ) : (
-                  <button
-                    onClick={onStartWorkout}
-                    className="w-full btn btn-primary btn-lg touch-feedback"
-                  >
-                    <Play className="w-5 h-5 mr-2" />
-                    Continue Workout ({completedCount}/{totalExercises})
-                  </button>
-                )}
+                  ) : (
+                    <button
+                      onClick={onStartWorkout}
+                      className="flex-1 btn btn-primary touch-feedback"
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      Continue
+                    </button>
+                  )}
+                </div>
               </>
             )}
           </div>

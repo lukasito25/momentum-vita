@@ -10,7 +10,13 @@ import {
   Minus,
   ArrowLeft,
   RotateCcw,
+  ExternalLink,
+  Eye,
+  Volume2,
+  Info,
+  Target,
 } from 'lucide-react';
+import EnhancedExerciseCard from './EnhancedExerciseCard';
 
 interface Exercise {
   id: string;
@@ -47,6 +53,8 @@ const ExerciseFlow: React.FC<ExerciseFlowProps> = ({
   const [weight, setWeight] = useState(0);
   const [reps, setReps] = useState('');
   const [exerciseData, setExerciseData] = useState<Record<string, SetData[]>>({});
+  const [showGuide, setShowGuide] = useState(false);
+  const [showVideoOverlay, setShowVideoOverlay] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -170,6 +178,21 @@ const ExerciseFlow: React.FC<ExerciseFlowProps> = ({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Generate video URL for exercise
+  const getExerciseVideoUrl = (exerciseName: string): string => {
+    const searchQuery = exerciseName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '+');
+    return `https://www.youtube.com/results?search_query=how+to+${searchQuery}+exercise+form+tutorial`;
+  };
+
+  const handleShowGuide = () => {
+    setShowGuide(true);
+  };
+
+  const handlePlayVideo = () => {
+    const videoUrl = getExerciseVideoUrl(currentExercise.name);
+    window.open(videoUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const progress = ((activeExerciseIndex + (currentSet - 1) / totalSets) / exercises.length) * 100;
 
   if (!currentExercise) {
@@ -245,12 +268,22 @@ const ExerciseFlow: React.FC<ExerciseFlowProps> = ({
           </div>
         )}
 
-        {/* Exercise Card */}
+        {/* Enhanced Exercise Card */}
+        <EnhancedExerciseCard
+          exercise={currentExercise}
+          index={activeExerciseIndex}
+          isActive={true}
+          onShowGuide={handleShowGuide}
+          onPlayVideo={handlePlayVideo}
+          showActions={true}
+        />
+
+        {/* Exercise Controls */}
         <div className="card mb-6">
           <div className="card-body">
             <div className="mb-4">
               <h2 className="text-xl font-bold text-gray-900 mb-2">
-                {currentExercise.name}
+                Set {currentSet} of {totalSets}
               </h2>
               <p className="text-gray-600">
                 Target: {targetReps} reps
@@ -376,6 +409,98 @@ const ExerciseFlow: React.FC<ExerciseFlowProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Exercise Guide Modal */}
+      {showGuide && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="mobile-container max-w-md bg-white rounded-2xl shadow-2xl animate-slide-up max-h-[80vh] overflow-hidden">
+            {/* Guide Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-100">
+              <h3 className="text-lg font-bold text-gray-900">Exercise Guide</h3>
+              <button
+                onClick={() => setShowGuide(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg touch-feedback"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Guide Content */}
+            <div className="p-4 overflow-y-auto max-h-[60vh]">
+              <div className="space-y-4">
+                {/* Exercise Name */}
+                <div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">{currentExercise.name}</h4>
+                  <p className="text-gray-600">{currentExercise.sets} • Rest: {currentExercise.rest}</p>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handlePlayVideo}
+                    className="flex-1 btn btn-primary touch-feedback"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Watch Tutorial
+                  </button>
+                  <button
+                    onClick={() => setShowGuide(false)}
+                    className="flex-1 btn btn-secondary touch-feedback"
+                  >
+                    Got It
+                  </button>
+                </div>
+
+                {/* Exercise Instructions */}
+                <div className="card bg-blue-50 border-blue-200">
+                  <div className="card-body">
+                    <div className="flex items-start gap-2 mb-3">
+                      <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <h5 className="font-semibold text-blue-900">Key Points</h5>
+                    </div>
+                    <p className="text-sm text-blue-800 leading-relaxed">
+                      {currentExercise.notes}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Set Information */}
+                <div className="card bg-green-50 border-green-200">
+                  <div className="card-body">
+                    <div className="flex items-start gap-2 mb-3">
+                      <Target className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <h5 className="font-semibold text-green-900">Current Set</h5>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <span className="text-green-700 font-medium">Set:</span>
+                        <span className="text-green-800 ml-1">{currentSet} of {totalSets}</span>
+                      </div>
+                      <div>
+                        <span className="text-green-700 font-medium">Target:</span>
+                        <span className="text-green-800 ml-1">{targetReps} reps</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Form Tips */}
+                <div className="card bg-yellow-50 border-yellow-200">
+                  <div className="card-body">
+                    <h5 className="font-semibold text-yellow-900 mb-2">Form Reminders</h5>
+                    <ul className="text-sm text-yellow-800 space-y-1">
+                      <li>• Maintain proper breathing throughout</li>
+                      <li>• Control both lifting and lowering phases</li>
+                      <li>• Focus on quality over quantity</li>
+                      <li>• Stop if you feel pain or discomfort</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
