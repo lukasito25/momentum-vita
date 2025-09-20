@@ -154,12 +154,45 @@ const CustomWorkoutGenerator: React.FC<CustomWorkoutGeneratorProps> = ({
     );
   };
 
+  // Map UI goal types to database keys
+  const mapGoalToDatabase = (goal: WorkoutGoal): keyof typeof exerciseDatabase => {
+    switch (goal) {
+      case 'fat-loss':
+      case 'muscle-gain':
+      case 'functional':
+      case 'strength':
+        return 'strength';
+      case 'endurance':
+        return 'endurance';
+      case 'flexibility':
+        return 'flexibility';
+      default:
+        return 'strength';
+    }
+  };
+
+  // Map UI equipment types to database keys
+  const mapEquipmentToDatabase = (equipment: EquipmentType): keyof typeof exerciseDatabase.strength => {
+    switch (equipment) {
+      case 'none':
+        return 'bodyweight';
+      case 'basic':
+        return 'basic';
+      case 'gym':
+        return 'gym';
+      default:
+        return 'bodyweight';
+    }
+  };
+
   const generateWorkout = () => {
     if (selectedGoals.length === 0) return;
 
     // AI-powered workout generation logic
     const primaryGoal = selectedGoals[0];
-    const availableExercises = exerciseDatabase[primaryGoal]?.[equipment] || exerciseDatabase.strength[equipment];
+    const dbGoal = mapGoalToDatabase(primaryGoal);
+    const dbEquipment = mapEquipmentToDatabase(equipment);
+    const availableExercises = exerciseDatabase[dbGoal]?.[dbEquipment] || exerciseDatabase.strength[dbEquipment];
 
     // Calculate number of exercises based on duration
     const exerciseCount = duration === '15' ? 4 : duration === '30' ? 6 : duration === '45' ? 8 : 10;
