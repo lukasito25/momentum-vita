@@ -8,8 +8,9 @@ import CustomWorkoutGenerator from './CustomWorkoutGenerator';
 import ProgramSelectionModal from './ProgramSelectionModal';
 import WorkoutLibrary from './WorkoutLibrary';
 import WorkoutPreview from './WorkoutPreview';
+import { ThemeSettingsModal, NotificationSettingsModal, PrivacySettingsModal } from './SettingsModals';
 import { workoutPrograms, getTodaysWorkout, getWorkoutProgram } from '../data/workout-programs';
-import { User, BarChart3, Settings, Crown } from 'lucide-react';
+import { User, BarChart3, Settings, Crown, Palette, Bell, Shield } from 'lucide-react';
 
 // Sample workout data
 const sampleWorkout = [
@@ -57,6 +58,9 @@ const MobileApp: React.FC = () => {
   const [showWorkoutPreview, setShowWorkoutPreview] = useState(false);
   const [currentProgramId, setCurrentProgramId] = useState('foundation-builder');
   const [currentWorkout, setCurrentWorkout] = useState(sampleWorkout);
+  const [showThemeSettings, setShowThemeSettings] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+  const [showPrivacySettings, setShowPrivacySettings] = useState(false);
 
   // Load user from localStorage on mount
   useEffect(() => {
@@ -271,12 +275,34 @@ const MobileApp: React.FC = () => {
                   <div className="card-body">
                     <h3 className="font-semibold text-gray-900 mb-4">Settings</h3>
                     <div className="space-y-3">
-                      <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
-                        <span>Notifications</span>
+                      <button
+                        onClick={() => setShowThemeSettings(true)}
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                      >
+                        <div className="flex items-center">
+                          <Palette className="w-5 h-5 mr-3 text-indigo-600" />
+                          <span>Theme</span>
+                        </div>
                         <Settings className="w-4 h-4 text-gray-400" />
                       </button>
-                      <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
-                        <span>Privacy</span>
+                      <button
+                        onClick={() => setShowNotificationSettings(true)}
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                      >
+                        <div className="flex items-center">
+                          <Bell className="w-5 h-5 mr-3 text-blue-600" />
+                          <span>Notifications</span>
+                        </div>
+                        <Settings className="w-4 h-4 text-gray-400" />
+                      </button>
+                      <button
+                        onClick={() => setShowPrivacySettings(true)}
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                      >
+                        <div className="flex items-center">
+                          <Shield className="w-5 h-5 mr-3 text-green-600" />
+                          <span>Privacy</span>
+                        </div>
                         <Settings className="w-4 h-4 text-gray-400" />
                       </button>
                       <button
@@ -400,6 +426,22 @@ const MobileApp: React.FC = () => {
           }}
         />
       )}
+
+      {/* Settings Modals */}
+      <ThemeSettingsModal
+        isOpen={showThemeSettings}
+        onClose={() => setShowThemeSettings(false)}
+      />
+
+      <NotificationSettingsModal
+        isOpen={showNotificationSettings}
+        onClose={() => setShowNotificationSettings(false)}
+      />
+
+      <PrivacySettingsModal
+        isOpen={showPrivacySettings}
+        onClose={() => setShowPrivacySettings(false)}
+      />
     </div>
   );
 };

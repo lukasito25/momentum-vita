@@ -282,8 +282,42 @@ body {
 }
 
 /* Dark mode support */
+.dark {
+  --bg-primary: var(--color-gray-900);
+  --bg-secondary: var(--color-gray-800);
+  --bg-accent: var(--color-gray-700);
+  --text-primary: var(--color-gray-100);
+  --text-secondary: var(--color-gray-300);
+  --text-muted: var(--color-gray-400);
+}
+
+.dark .card {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .mobile-container {
+  @apply bg-gray-900;
+}
+
+.dark .page-header {
+  @apply bg-gray-900/80 border-gray-700;
+}
+
+.dark .bottom-nav {
+  @apply bg-gray-900 border-gray-700;
+}
+
+.dark .btn-secondary {
+  @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
+}
+
+.dark .nav-tab-inactive {
+  @apply text-gray-500;
+}
+
+/* System preference fallback */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --bg-primary: var(--color-gray-900);
     --bg-secondary: var(--color-gray-800);
     --bg-accent: var(--color-gray-700);
@@ -292,7 +326,7 @@ body {
     --text-muted: var(--color-gray-400);
   }
 
-  .card {
+  :root:not(.light) .card {
     @apply bg-gray-800 border-gray-700;
   }
 }

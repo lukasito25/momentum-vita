@@ -3,6 +3,7 @@ import MobileApp from './components/MobileApp';
 import { ImageService } from './lib/imageService';
 import ErrorBoundary from './components/ErrorBoundary';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   useEffect(() => {
@@ -12,8 +13,10 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <MobileApp />
-      <PWAInstallPrompt />
+      <ThemeProvider>
+        <MobileApp />
+        <PWAInstallPrompt />
+      </ThemeProvider>
     </ErrorBoundary>
   )
 }
