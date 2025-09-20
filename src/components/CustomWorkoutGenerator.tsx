@@ -13,6 +13,8 @@ import {
   Plus,
   Minus,
   Shuffle,
+  Save,
+  Tag,
 } from 'lucide-react';
 
 interface CustomWorkoutGeneratorProps {
@@ -21,6 +23,7 @@ interface CustomWorkoutGeneratorProps {
 }
 
 interface GeneratedWorkout {
+  id?: string;
   name: string;
   exercises: Array<{
     id: string;
@@ -32,6 +35,8 @@ interface GeneratedWorkout {
   duration: number;
   difficulty: string;
   focus: string[];
+  tags?: string[];
+  createdAt?: string;
 }
 
 type WorkoutGoal = 'strength' | 'endurance' | 'flexibility' | 'fat-loss' | 'muscle-gain' | 'functional';
@@ -121,6 +126,10 @@ const CustomWorkoutGenerator: React.FC<CustomWorkoutGeneratorProps> = ({
   const [equipment, setEquipment] = useState<EquipmentType>('none');
   const [experience, setExperience] = useState<ExperienceLevel>('beginner');
   const [generatedWorkout, setGeneratedWorkout] = useState<GeneratedWorkout | null>(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [workoutName, setWorkoutName] = useState('');
+  const [workoutTags, setWorkoutTags] = useState<string[]>([]);
+  const [newTag, setNewTag] = useState('');
 
   const goals: Array<{ id: WorkoutGoal; label: string; icon: React.ComponentType; description: string }> = [
     { id: 'strength', label: 'Build Strength', icon: Dumbbell, description: 'Increase muscle strength and power' },
@@ -258,6 +267,46 @@ const CustomWorkoutGenerator: React.FC<CustomWorkoutGeneratorProps> = ({
     const steps = ['goals', 'duration', 'equipment', 'experience', 'results'];
     const currentIndex = steps.indexOf(currentStep);
     return ((currentIndex + 1) / steps.length) * 100;
+  };
+
+  const handleSaveWorkout = () => {
+    if (!generatedWorkout) return;
+    setWorkoutName(generatedWorkout.name);
+    setWorkoutTags([]);
+    setNewTag('');
+    setShowSaveModal(true);
+  };
+
+  const addTag = () => {
+    if (newTag.trim() && !workoutTags.includes(newTag.trim())) {
+      setWorkoutTags(prev => [...prev, newTag.trim()]);
+      setNewTag('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setWorkoutTags(prev => prev.filter(tag => tag !== tagToRemove));
+  };
+
+  const saveWorkoutToLibrary = () => {
+    if (!generatedWorkout || !workoutName.trim()) return;
+
+    const savedWorkout: GeneratedWorkout = {
+      ...generatedWorkout,
+      id: `custom_${Date.now()}`,
+      name: workoutName.trim(),
+      tags: workoutTags,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Save to localStorage
+    const existingSavedWorkouts = JSON.parse(localStorage.getItem('saved_workouts') || '[]');
+    const updatedWorkouts = [...existingSavedWorkouts, savedWorkout];
+    localStorage.setItem('saved_workouts', JSON.stringify(updatedWorkouts));
+
+    setShowSaveModal(false);
+    // Show success feedback
+    alert('Workout saved successfully!');
   };
 
   return (
@@ -445,17 +494,26 @@ const CustomWorkoutGenerator: React.FC<CustomWorkoutGeneratorProps> = ({
                 ))}
               </div>
 
-              <div className="flex gap-3 mb-4">
-                <button
-                  onClick={regenerateWorkout}
-                  className="flex-1 btn btn-secondary touch-feedback"
-                >
-                  <Shuffle className="w-4 h-4 mr-2" />
-                  Regenerate
-                </button>
+              <div className="space-y-3 mb-4">
+                <div className="flex gap-3">
+                  <button
+                    onClick={regenerateWorkout}
+                    className="flex-1 btn btn-secondary touch-feedback"
+                  >
+                    <Shuffle className="w-4 h-4 mr-2" />
+                    Regenerate
+                  </button>
+                  <button
+                    onClick={handleSaveWorkout}
+                    className="flex-1 btn btn-secondary touch-feedback"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Save
+                  </button>
+                </div>
                 <button
                   onClick={() => onComplete(generatedWorkout)}
-                  className="flex-1 btn btn-primary touch-feedback"
+                  className="w-full btn btn-primary touch-feedback"
                 >
                   Start Workout
                 </button>
@@ -478,6 +536,100 @@ const CustomWorkoutGenerator: React.FC<CustomWorkoutGeneratorProps> = ({
           </div>
         )}
       </div>
+
+      {/* Save Workout Modal */}
+      {showSaveModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-60">
+          <div className="mobile-container max-w-sm bg-white rounded-2xl shadow-2xl animate-slide-up">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Save Workout</h3>
+                <button
+                  onClick={() => setShowSaveModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Workout Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Workout Name
+                  </label>
+                  <input
+                    type="text"
+                    value={workoutName}
+                    onChange={(e) => setWorkoutName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Enter workout name"
+                  />
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Tags (optional)
+                  </label>
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && addTag()}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      placeholder="Add tag"
+                    />
+                    <button
+                      onClick={addTag}
+                      className="px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                  {workoutTags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {workoutTags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-full"
+                        >
+                          <Tag className="w-3 h-3 mr-1" />
+                          {tag}
+                          <button
+                            onClick={() => removeTag(tag)}
+                            className="ml-1 hover:text-indigo-900"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setShowSaveModal(false)}
+                  className="flex-1 btn btn-secondary touch-feedback"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveWorkoutToLibrary}
+                  disabled={!workoutName.trim()}
+                  className="flex-1 btn btn-primary touch-feedback disabled:opacity-50"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

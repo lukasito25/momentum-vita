@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dumbbell,
   Clock,
@@ -9,8 +9,28 @@ import {
   Calendar,
   Target,
   Zap,
+  Bookmark,
+  Tag,
+  Play,
 } from 'lucide-react';
 import { workoutPrograms, WorkoutProgram } from '../data/workout-programs';
+
+interface SavedWorkout {
+  id: string;
+  name: string;
+  exercises: Array<{
+    id: string;
+    name: string;
+    sets: string;
+    rest: string;
+    notes: string;
+  }>;
+  duration: number;
+  difficulty: string;
+  focus: string[];
+  tags?: string[];
+  createdAt: string;
+}
 
 interface WorkoutLibraryProps {
   onSelectProgram: (programId: string) => void;
@@ -30,7 +50,28 @@ const WorkoutLibrary: React.FC<WorkoutLibraryProps> = ({
   onUpgrade,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'free' | 'premium' | 'difficulty'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'free' | 'premium' | 'saved'>('all');
+  const [savedWorkouts, setSavedWorkouts] = useState<SavedWorkout[]>([]);
+
+  // Load saved workouts from localStorage
+  useEffect(() => {
+    const loadSavedWorkouts = () => {
+      try {
+        const saved = localStorage.getItem('saved_workouts');
+        if (saved) {
+          setSavedWorkouts(JSON.parse(saved));
+        }
+      } catch (error) {
+        console.error('Error loading saved workouts:', error);
+      }
+    };
+
+    loadSavedWorkouts();
+
+    // Listen for storage changes to update when workouts are saved
+    window.addEventListener('storage', loadSavedWorkouts);
+    return () => window.removeEventListener('storage', loadSavedWorkouts);
+  }, []);
 
   const filteredPrograms = workoutPrograms.filter(program => {
     const matchesSearch = program.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -43,10 +84,35 @@ const WorkoutLibrary: React.FC<WorkoutLibraryProps> = ({
         return !program.isPremium;
       case 'premium':
         return program.isPremium;
+      case 'saved':
+        return false; // Don't show programs when saved filter is active
       default:
         return true;
     }
   });
+
+  const filteredSavedWorkouts = savedWorkouts.filter(workout => {
+    const matchesSearch = workout.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         workout.focus.some(focus => focus.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                         workout.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesSearch;
+  });
+
+  const handleStartSavedWorkout = (workout: SavedWorkout) => {
+    // Convert saved workout to the format expected by onComplete
+    const workoutData = {
+      name: workout.name,
+      exercises: workout.exercises,
+      duration: workout.duration,
+      difficulty: workout.difficulty,
+      focus: workout.focus,
+    };
+
+    // We need to pass this to the parent component to start the workout
+    // For now, we'll store it in a way that can be accessed by the workout flow
+    localStorage.setItem('current_workout_temp', JSON.stringify(workoutData));
+    onStartTodaysWorkout(); // This will start the workout flow
+  };
 
   const getDifficultyColor = (difficulty: WorkoutProgram['difficulty']) => {
     switch (difficulty) {
@@ -127,6 +193,7 @@ const WorkoutLibrary: React.FC<WorkoutLibraryProps> = ({
             { id: 'all', label: 'All' },
             { id: 'free', label: 'Free' },
             { id: 'premium', label: 'Premium', icon: Crown },
+            { id: 'saved', label: 'Saved', icon: Bookmark },
           ].map(({ id, label, icon: Icon }) => (
             <button
               key={id}
@@ -144,9 +211,94 @@ const WorkoutLibrary: React.FC<WorkoutLibraryProps> = ({
         </div>
       </div>
 
-      {/* Program List */}
-      <div className="space-y-4">
-        {filteredPrograms.map((program) => {
+      {/* Program List or Saved Workouts */}
+      {selectedFilter === 'saved' ? (
+        <div className="space-y-4">
+          {filteredSavedWorkouts.length > 0 ? (
+            filteredSavedWorkouts.map((workout) => (
+              <div key={workout.id} className="card">
+                <div className="card-body">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg mb-1 text-gray-900">
+                        {workout.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2">
+                        {workout.duration} min • {workout.exercises.length} exercises • {workout.difficulty}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Workout Stats */}
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <Clock className="w-4 h-4 text-gray-500 mx-auto mb-1" />
+                      <div className="text-sm font-bold text-gray-900">{workout.duration}m</div>
+                      <div className="text-xs text-gray-600">Duration</div>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <Dumbbell className="w-4 h-4 text-gray-500 mx-auto mb-1" />
+                      <div className="text-sm font-bold text-gray-900">{workout.exercises.length}</div>
+                      <div className="text-xs text-gray-600">Exercises</div>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <Zap className="w-4 h-4 text-gray-500 mx-auto mb-1" />
+                      <div className="text-sm font-bold text-gray-900">{workout.difficulty}</div>
+                      <div className="text-xs text-gray-600">Level</div>
+                    </div>
+                  </div>
+
+                  {/* Focus Areas */}
+                  <div className="flex flex-wrap gap-1 mb-4">
+                    {workout.focus.slice(0, 3).map((focus, index) => (
+                      <span
+                        key={index}
+                        className="inline-block px-2 py-1 text-xs rounded-full bg-indigo-100 text-indigo-700"
+                      >
+                        {focus}
+                      </span>
+                    ))}
+                    {workout.tags && workout.tags.slice(0, 2).map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600"
+                      >
+                        <Tag className="w-3 h-3 mr-1" />
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Action Button */}
+                  <button
+                    onClick={() => handleStartSavedWorkout(workout)}
+                    className="w-full btn btn-primary touch-feedback"
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    Start Workout
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Bookmark className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">No saved workouts</h3>
+              <p className="text-gray-600 mb-4">Create and save custom workouts to see them here</p>
+              <button
+                onClick={onStartCustomWorkout}
+                className="btn btn-primary touch-feedback"
+              >
+                Create Workout
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredPrograms.map((program) => {
           const isActive = program.id === currentProgramId;
           const isLocked = program.isPremium && !isAuthenticated;
 
@@ -280,11 +432,13 @@ const WorkoutLibrary: React.FC<WorkoutLibraryProps> = ({
               </div>
             </div>
           );
-        })}
-      </div>
+          })}
+        </div>
+      )}
 
       {/* No Results */}
-      {filteredPrograms.length === 0 && (
+      {((selectedFilter !== 'saved' && filteredPrograms.length === 0) ||
+        (selectedFilter === 'saved' && filteredSavedWorkouts.length === 0 && searchQuery)) && (
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8 text-gray-400" />

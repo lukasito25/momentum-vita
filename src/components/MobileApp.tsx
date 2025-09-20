@@ -248,7 +248,7 @@ const MobileApp: React.FC = () => {
                 </div>
 
                 {/* Goals */}
-                {user.goals.length > 0 && (
+                {user.goals && user.goals.length > 0 && (
                   <div className="card">
                     <div className="card-body">
                       <h3 className="font-semibold text-gray-900 mb-3">Your Goals</h3>

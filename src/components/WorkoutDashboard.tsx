@@ -39,8 +39,46 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
   currentProgramId = 'foundation-builder',
 }) => {
   const [completedExercises, setCompletedExercises] = useState<string[]>([]);
-  const [currentStreak, setCurrentStreak] = useState(3);
+  const [currentStreak, setCurrentStreak] = useState(0);
   const [todayCompleted, setTodayCompleted] = useState(false);
+
+  // Load completed exercises and streak from localStorage
+  useEffect(() => {
+    const savedCompleted = localStorage.getItem('completed_exercises_today');
+    const savedStreak = localStorage.getItem('workout_streak');
+    const lastWorkoutDate = localStorage.getItem('last_workout_date');
+    const today = new Date().toDateString();
+
+    if (savedCompleted && lastWorkoutDate === today) {
+      try {
+        setCompletedExercises(JSON.parse(savedCompleted));
+      } catch (error) {
+        console.error('Error parsing completed exercises:', error);
+      }
+    } else if (lastWorkoutDate !== today) {
+      // Reset daily progress if it's a new day
+      localStorage.removeItem('completed_exercises_today');
+      setCompletedExercises([]);
+    }
+
+    if (savedStreak) {
+      setCurrentStreak(parseInt(savedStreak) || 0);
+    }
+  }, []);
+
+  // Update streak and today's completion status
+  useEffect(() => {
+    const today = new Date().toDateString();
+    const isWorkoutComplete = totalExercises > 0 && completedCount === totalExercises;
+
+    if (isWorkoutComplete && !todayCompleted) {
+      setTodayCompleted(true);
+      const newStreak = currentStreak + 1;
+      setCurrentStreak(newStreak);
+      localStorage.setItem('workout_streak', newStreak.toString());
+      localStorage.setItem('last_workout_date', today);
+    }
+  }, [completedCount, totalExercises, currentStreak, todayCompleted]);
 
   // Calculate progress
   const totalExercises = todaysWorkout.length;
@@ -49,7 +87,9 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
 
   const handleExerciseComplete = (exerciseId: string) => {
     if (!completedExercises.includes(exerciseId)) {
-      setCompletedExercises(prev => [...prev, exerciseId]);
+      const newCompleted = [...completedExercises, exerciseId];
+      setCompletedExercises(newCompleted);
+      localStorage.setItem('completed_exercises_today', JSON.stringify(newCompleted));
     }
   };
 
@@ -150,6 +190,7 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
                   <button
                     onClick={onShowWorkoutPreview}
                     className="flex-1 btn btn-secondary touch-feedback"
+                    disabled={!onShowWorkoutPreview}
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     Preview
@@ -192,12 +233,13 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
               {todaysWorkout.slice(0, 3).map((exercise, index) => {
                 const isCompleted = completedExercises.includes(exercise.id);
                 return (
-                  <div
+                  <button
                     key={exercise.id}
-                    className={`flex items-center p-3 rounded-lg border transition-colors ${
+                    onClick={() => handleExerciseComplete(exercise.id)}
+                    className={`flex items-center p-3 rounded-lg border transition-colors w-full text-left touch-feedback ${
                       isCompleted
                         ? 'bg-green-50 border-green-200'
-                        : 'bg-gray-50 border-gray-200'
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     <div className="flex-shrink-0 mr-3">
@@ -224,7 +266,7 @@ const WorkoutDashboard: React.FC<WorkoutDashboardProps> = ({
                         isCompleted ? 'text-green-600' : 'text-gray-400'
                       }`} />
                     </div>
-                  </div>
+                  </button>
                 );
               })}
 

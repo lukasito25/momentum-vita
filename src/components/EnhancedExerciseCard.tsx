@@ -180,16 +180,12 @@ const EnhancedExerciseCard: React.FC<EnhancedExerciseCardProps> = ({
               }`}>
                 {exercise.name}
               </h3>
-              <div className="flex items-center gap-3 mt-1">
+              <div className="mt-1">
                 <span className={`text-sm font-medium ${
                   isCompleted ? 'text-green-600' : isActive ? 'text-indigo-600' : 'text-gray-600'
                 }`}>
                   {exercise.sets}
                 </span>
-                <div className="flex items-center gap-1 text-xs text-gray-500">
-                  <Clock className="w-3 h-3" />
-                  <span>{exercise.rest}</span>
-                </div>
               </div>
             </div>
           </div>
@@ -207,6 +203,26 @@ const EnhancedExerciseCard: React.FC<EnhancedExerciseCardProps> = ({
               </div>
             </div>
           )}
+
+          {/* Rest Time */}
+          <div className={`flex items-center justify-center gap-2 p-2 rounded-lg border ${
+            isActive ? 'bg-indigo-50 border-indigo-200' :
+            isCompleted ? 'bg-green-50 border-green-200' :
+            'bg-gray-50 border-gray-200'
+          }`}>
+            <Clock className={`w-4 h-4 ${
+              isActive ? 'text-indigo-600' :
+              isCompleted ? 'text-green-600' :
+              'text-gray-500'
+            }`} />
+            <span className={`text-sm font-medium ${
+              isActive ? 'text-indigo-700' :
+              isCompleted ? 'text-green-700' :
+              'text-gray-700'
+            }`}>
+              Rest: {exercise.rest}
+            </span>
+          </div>
 
           {/* Action Buttons */}
           {showActions && (
