@@ -511,12 +511,12 @@ const CustomWorkoutGenerator: React.FC<CustomWorkoutGeneratorProps> = ({
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 mb-2">{generatedWorkout.name}</h2>
                 <p className="text-gray-600">
-                  {generatedWorkout.duration} min • {generatedWorkout.exercises.length} exercises • {generatedWorkout.difficulty}
+                  {generatedWorkout.duration} min • {generatedWorkout.exercises?.length || 0} exercises • {generatedWorkout.difficulty}
                 </p>
               </div>
 
               <div className="space-y-3 mb-6">
-                {generatedWorkout.exercises.map((exercise, index) => (
+                {generatedWorkout.exercises && Array.isArray(generatedWorkout.exercises) ? generatedWorkout.exercises.map((exercise, index) => (
                   <div key={exercise.id} className="p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium text-gray-900">{exercise.name}</span>
@@ -524,7 +524,9 @@ const CustomWorkoutGenerator: React.FC<CustomWorkoutGeneratorProps> = ({
                     </div>
                     <p className="text-xs text-gray-600">{exercise.notes}</p>
                   </div>
-                ))}
+                )) : (
+                  <div className="text-center text-gray-500">No exercises available</div>
+                )}
               </div>
 
               <div className="space-y-3 mb-4">

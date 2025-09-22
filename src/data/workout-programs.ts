@@ -110,9 +110,19 @@ export const getTodaysWorkout = (programId: string, week: number = 1): { dayName
   const dayName = workoutDays[workoutIndex];
   const workout = program.workouts[dayName];
 
+  // Ensure workout exists and has exercises
+  if (!workout || !workout.exercises) {
+    return null;
+  }
+
   // Start with preparation level, can be upgraded based on user progress
   const difficulty = 'preparation';
   const exercises = workout.exercises[difficulty as keyof typeof workout.exercises];
+
+  // Ensure exercises array exists and is valid
+  if (!exercises || !Array.isArray(exercises)) {
+    return null;
+  }
 
   return {
     dayName,

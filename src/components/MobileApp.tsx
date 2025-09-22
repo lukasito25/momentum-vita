@@ -83,12 +83,15 @@ const MobileApp: React.FC = () => {
   // Update current workout when program changes
   useEffect(() => {
     const todaysWorkout = getTodaysWorkout(currentProgramId);
-    if (todaysWorkout) {
+    if (todaysWorkout && todaysWorkout.exercises && Array.isArray(todaysWorkout.exercises)) {
       const exercisesWithIds = todaysWorkout.exercises.map((exercise, index) => ({
         id: `${todaysWorkout.dayName}-${index}`,
         ...exercise
       }));
       setCurrentWorkout(exercisesWithIds);
+    } else {
+      // Fallback to sample workout if no valid workout is found
+      setCurrentWorkout(sampleWorkout);
     }
   }, [currentProgramId]);
 
@@ -161,6 +164,11 @@ const MobileApp: React.FC = () => {
 
   const handleCustomWorkoutComplete = (workout: any) => {
     // Convert generated workout to our exercise format
+    if (!workout || !workout.exercises || !Array.isArray(workout.exercises)) {
+      console.error('Invalid workout data:', workout);
+      return;
+    }
+
     const customExercises = workout.exercises.map((exercise: any) => ({
       id: exercise.id,
       name: exercise.name,
