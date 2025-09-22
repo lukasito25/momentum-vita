@@ -238,10 +238,10 @@ const MobileApp: React.FC = () => {
                         {user.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-1">
                       {user.name}
                     </h2>
-                    <p className="text-gray-600 mb-3">{user.email}</p>
+                    <p className="text-gray-600 dark:text-gray-400 mb-3">{user.email}</p>
                     {user.isPremium && (
                       <div className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-sm font-medium rounded-full">
                         <Crown className="w-4 h-4 mr-1" />
@@ -255,12 +255,12 @@ const MobileApp: React.FC = () => {
                 {user.goals && user.goals.length > 0 && (
                   <div className="card">
                     <div className="card-body">
-                      <h3 className="font-semibold text-gray-900 mb-3">Your Goals</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Your Goals</h3>
                       <div className="flex flex-wrap gap-2">
                         {user.goals.map((goal) => (
                           <span
                             key={goal}
-                            className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-full"
+                            className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm rounded-full"
                           >
                             {goal.replace('-', ' ')}
                           </span>
@@ -273,44 +273,44 @@ const MobileApp: React.FC = () => {
                 {/* Settings */}
                 <div className="card">
                   <div className="card-body">
-                    <h3 className="font-semibold text-gray-900 mb-4">Settings</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Settings</h3>
                     <div className="space-y-3">
                       <button
                         onClick={() => setShowThemeSettings(true)}
-                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg"
                       >
                         <div className="flex items-center">
                           <Palette className="w-5 h-5 mr-3 text-indigo-600" />
                           <span>Theme</span>
                         </div>
-                        <Settings className="w-4 h-4 text-gray-400" />
+                        <Settings className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                       </button>
                       <button
                         onClick={() => setShowNotificationSettings(true)}
-                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg"
                       >
                         <div className="flex items-center">
                           <Bell className="w-5 h-5 mr-3 text-blue-600" />
                           <span>Notifications</span>
                         </div>
-                        <Settings className="w-4 h-4 text-gray-400" />
+                        <Settings className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                       </button>
                       <button
                         onClick={() => setShowPrivacySettings(true)}
-                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg"
                       >
                         <div className="flex items-center">
                           <Shield className="w-5 h-5 mr-3 text-green-600" />
                           <span>Privacy</span>
                         </div>
-                        <Settings className="w-4 h-4 text-gray-400" />
+                        <Settings className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                       </button>
                       <button
                         onClick={() => {
                           setUser(null);
                           localStorage.removeItem('momentum_vita_user');
                         }}
-                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg text-red-600"
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-red-600"
                       >
                         <span>Sign Out</span>
                       </button>
@@ -320,11 +320,11 @@ const MobileApp: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="w-8 h-8 text-gray-400" />
+                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <User className="w-8 h-8 text-gray-400 dark:text-gray-500" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Sign In</h2>
-                <p className="text-gray-600 mb-6">Create an account to save your progress and access premium features</p>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Sign In</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">Create an account to save your progress and access premium features</p>
                 <button
                   onClick={() => handleUpgrade('premium')}
                   className="btn btn-primary btn-lg touch-feedback"
@@ -356,7 +356,7 @@ const MobileApp: React.FC = () => {
       {/* Page Header */}
       <div className="page-header px-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">
+          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
             {activeTab === 'home' && 'Momentum Vita'}
             {activeTab === 'workout' && 'Workouts'}
             {activeTab === 'progress' && 'Progress'}

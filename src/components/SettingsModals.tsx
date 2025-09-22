@@ -48,13 +48,13 @@ export const ThemeSettingsModal: React.FC<ThemeSettingsModalProps> = ({ isOpen, 
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
                 theme === id ? 'bg-indigo-500' : 'bg-gray-100 dark:bg-gray-700'
               }`}>
-                <Icon className={`w-5 h-5 ${theme === id ? 'text-white' : 'text-gray-600'}`} />
+                <Icon className={`w-5 h-5 ${theme === id ? 'text-white' : 'text-gray-600 dark:text-gray-300'}`} />
               </div>
               <div className="flex-1 text-left">
-                <div className={`font-medium ${theme === id ? 'text-indigo-900' : 'text-gray-900'}`}>
+                <div className={`font-medium ${theme === id ? 'text-indigo-900 dark:text-indigo-100' : 'text-gray-900 dark:text-gray-100'}`}>
                   {label}
                 </div>
-                <div className={`text-sm ${theme === id ? 'text-indigo-600' : 'text-gray-600'}`}>
+                <div className={`text-sm ${theme === id ? 'text-indigo-600 dark:text-indigo-300' : 'text-gray-600 dark:text-gray-300'}`}>
                   {description}
                 </div>
               </div>
@@ -104,39 +104,39 @@ export const NotificationSettingsModal: React.FC<NotificationSettingsModalProps>
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Notification Settings</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full max-h-[90vh] overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Notification Settings</h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <X className="w-5 h-5 text-gray-400" />
+            <X className="w-5 h-5 text-gray-400 dark:text-gray-300" />
           </button>
         </div>
 
         <div className="p-4 space-y-4">
           {notificationOptions.map(({ key, label, description }) => (
-            <div key={key} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+            <div key={key} className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
               <div className="flex items-center flex-1">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                  settings[key] ? 'bg-green-100' : 'bg-gray-100'
+                  settings[key] ? 'bg-green-100 dark:bg-green-900/30' : 'bg-gray-100 dark:bg-gray-700'
                 }`}>
                   {settings[key] ? (
-                    <Bell className="w-5 h-5 text-green-600" />
+                    <Bell className="w-5 h-5 text-green-600 dark:text-green-400" />
                   ) : (
-                    <BellOff className="w-5 h-5 text-gray-400" />
+                    <BellOff className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   )}
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">{label}</div>
-                  <div className="text-sm text-gray-600">{description}</div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">{label}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">{description}</div>
                 </div>
               </div>
               <button
                 onClick={() => updateSetting(key, !settings[key])}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  settings[key] ? 'bg-indigo-500' : 'bg-gray-200'
+                  settings[key] ? 'bg-indigo-500' : 'bg-gray-200 dark:bg-gray-600'
                 }`}
               >
                 <span
@@ -186,39 +186,39 @@ export const PrivacySettingsModal: React.FC<PrivacySettingsModalProps> = ({ isOp
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Privacy Settings</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full max-h-[90vh] overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Privacy Settings</h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <X className="w-5 h-5 text-gray-400" />
+            <X className="w-5 h-5 text-gray-400 dark:text-gray-300" />
           </button>
         </div>
 
         <div className="p-4 space-y-4">
           {privacyOptions.map(({ key, label, description }) => (
-            <div key={key} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+            <div key={key} className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
               <div className="flex items-center flex-1">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                  settings[key] ? 'bg-blue-100' : 'bg-gray-100'
+                  settings[key] ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-gray-100 dark:bg-gray-700'
                 }`}>
                   {settings[key] ? (
-                    <Eye className="w-5 h-5 text-blue-600" />
+                    <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   ) : (
-                    <EyeOff className="w-5 h-5 text-gray-400" />
+                    <EyeOff className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   )}
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">{label}</div>
-                  <div className="text-sm text-gray-600">{description}</div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">{label}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">{description}</div>
                 </div>
               </div>
               <button
                 onClick={() => updateSetting(key, !settings[key])}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  settings[key] ? 'bg-indigo-500' : 'bg-gray-200'
+                  settings[key] ? 'bg-indigo-500' : 'bg-gray-200 dark:bg-gray-600'
                 }`}
               >
                 <span
@@ -230,8 +230,8 @@ export const PrivacySettingsModal: React.FC<PrivacySettingsModalProps> = ({ isOp
             </div>
           ))}
 
-          <div className="pt-4 border-t border-gray-200">
-            <button className="w-full flex items-center justify-center p-3 text-red-600 hover:bg-red-50 rounded-lg font-medium">
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+            <button className="w-full flex items-center justify-center p-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg font-medium">
               <Shield className="w-5 h-5 mr-2" />
               Request Data Export
             </button>

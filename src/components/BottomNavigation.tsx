@@ -60,18 +60,18 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
               <Icon
                 size={20}
                 className={`mb-1 ${
-                  isActive ? 'text-indigo-600' : 'text-gray-400'
+                  isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500'
                 }`}
               />
               <span className={`text-xs font-medium ${
-                isActive ? 'text-indigo-600' : 'text-gray-400'
+                isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500'
               }`}>
                 {label}
               </span>
 
               {/* Active indicator */}
               {isActive && (
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-indigo-600 rounded-full" />
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-indigo-600 dark:bg-indigo-500 rounded-full" />
               )}
             </button>
           );
